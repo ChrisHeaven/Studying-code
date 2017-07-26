@@ -3,75 +3,68 @@
 #include <stdio.h>
 using namespace std;
 
-int last_num(int num)
+int find_max(int n, int a[1000]) {
+	int max = -1e9;
+	for (int i = 0; i < n; i++) {
+		if (a[i] > max)
+			max = a[i];
+	}
+	return max;
+}
+
+int find_min(int n, int a[1000]) {
+	int min = 1e9;
+	for (int i = 0; i < n; i++) {
+		if (a[i] < min)
+			min = a[i];
+	}
+	return min;
+}
+
+int count_area(int n, int a[1000][2])
 {
-	if (num > 1000)
-		num = 1000;
-
-	int a[1000][1000];
-	int del_point = 2;
-	int arr_index = 0;
-	int count = 0;
-
-
-	for (int i = 0; i < num; i++) {
-		a[arr_index][i] = i;
+	int b[1000], c[1000];
+	for (int i = 0; i < n; ++i)
+	{
+		b[i] = a[i][0];
+		c[i] = a[i][1];
 	}
 
-	while (1) {
-		if (num - count == 1)
-			break;
+	int max_x = find_max(n, b);
+	int min_x = find_min(n, b);
 
-		if (del_point <= (num - 1 - count)) {
-			a[arr_index][del_point] = -1;
-			del_point = del_point + 3;
-		}
-		else {
-			del_point = del_point - (num - count);
+	int max_y = find_max(n, c);
+	int min_y = find_min(n, c);
 
-			int j = 0;
-			int sub_count = 0;
-			for (int i = 0; i < (num - count); i++) {
-				if (a[arr_index][i] == -1)
-					sub_count++;
-				else {
-					a[arr_index + 1][j] = a[arr_index][i];
-					j++;
-				}
-			}
-			arr_index++;
-			count = count + sub_count;
-		}
-		if (num - count == 1)
-			break;
-	}
+	int area;
+	if (max_x - min_x > max_y - min_y)
+		area = (max_x - min_x) * (max_x - min_x);
+	else
+		area = (max_y - min_y) * (max_y - min_y);
 
-	int value_ = a[arr_index][0];
-	cout << value_ << endl;
-	return 0;
+	return area;
 }
 
 int main()
 {
-	/* code */
-	/*int n = 249;
-	while(cin >> n)
-		last_num(n);*/
-
 	int n;
-	cin >> n;
-	int a[1000][2];
-	for (int i = 0; i < n; i++) {
-		cin >> a[i][0];
-		cin >> a[i][1];
+	while (cin >> n) {
+		int a[1000][2];
+		for (int i = 0; i < n; i++) {
+			cin >> a[i][0];
+			cin >> a[i][1];
+		}
+		cout << count_area(n, a) << endl;
 	}
 
-	cout << n << endl;
-	for (int i = 0; i < n; i++) {
-		cout << a[i][0] << " " << a[i][1] << endl;
-	}
+	// cout << n << endl;
+	// for (int i = 0; i < n; i++) {
+	//     cout << a[i][0] << " " << a[i][1] << endl;
+	// }
 
-	system("PAUSE");
+	//count_area(n, a);
+
+	//system("PAUSE");
 
 	return 0;
 }
