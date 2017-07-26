@@ -1,70 +1,37 @@
 #include <iostream>
 #include <stdlib.h>
 #include <stdio.h>
+
 using namespace std;
 
-int find_max(int n, int a[1000]) {
-	int max = -1e9;
-	for (int i = 0; i < n; i++) {
-		if (a[i] > max)
-			max = a[i];
-	}
-	return max;
-}
+char a[100];
 
-int find_min(int n, int a[1000]) {
-	int min = 1e9;
-	for (int i = 0; i < n; i++) {
-		if (a[i] < min)
-			min = a[i];
-	}
-	return min;
-}
-
-int count_area(int n, int a[1000][2])
+int no_repeat(char n[100])
 {
-	int b[1000], c[1000];
-	for (int i = 0; i < n; ++i)
-	{
-		b[i] = a[i][0];
-		c[i] = a[i][1];
+	int k = 0;
+	for (int i = 0; i < 100; i++) {
+		int flag = 0;
+		for (int j = 0; j < 100; j++) {
+			if (n[i] == n[j] && i > j) {
+				flag = 1;
+				break;
+			}
+		}
+		if (flag == 0) {
+			a[k] = n[i];
+			k++;
+		}
 	}
 
-	int max_x = find_max(n, b);
-	int min_x = find_min(n, b);
-
-	int max_y = find_max(n, c);
-	int min_y = find_min(n, c);
-
-	int area;
-	if (max_x - min_x > max_y - min_y)
-		area = (max_x - min_x) * (max_x - min_x);
-	else
-		area = (max_y - min_y) * (max_y - min_y);
-
-	return area;
+	return 0;
 }
 
 int main()
 {
-	int n;
+	char n[100] = { 0 };
 	while (cin >> n) {
-		int a[1000][2];
-		for (int i = 0; i < n; i++) {
-			cin >> a[i][0];
-			cin >> a[i][1];
-		}
-		cout << count_area(n, a) << endl;
+		no_repeat(n);
+		cout << a << endl;
 	}
-
-	// cout << n << endl;
-	// for (int i = 0; i < n; i++) {
-	//     cout << a[i][0] << " " << a[i][1] << endl;
-	// }
-
-	//count_area(n, a);
-
-	//system("PAUSE");
-
 	return 0;
 }
