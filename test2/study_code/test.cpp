@@ -5,44 +5,34 @@
 
 using namespace std;
 
-// char a[100];
-
-int upgrade(int a[], int b[])
+int ko(int a[])
 {
-    for (int i = 0; i < a[0]; i++) {
-        if (a[1] >= b[i])
-            a[1] = a[1] + b[i];
-        else {
-            int result = sqrt(a[1] * b[i]);
-            for (int j = result; j >= 0; j--) {
-                if ((a[1] % j == 0) && (b[i] % j == 0))
-                {
-                    a[1] = a[1] + j;
-                    break;
-                }
-            }
-        }
-    }
+    float dis_1, dis_2, dis_3;
+    dis_1 = sqrt((a[1] - a[7]) * (a[1] - a[7]) + (a[2] - a[8]) * (a[2] - a[8]));
+    dis_2 = sqrt((a[3] - a[7]) * (a[3] - a[7]) + (a[4] - a[8]) * (a[4] - a[8]));
+    dis_3 = sqrt((a[5] - a[7]) * (a[5] - a[7]) + (a[6] - a[8]) * (a[6] - a[8]));
 
-    return a[1];
+    int damage = 0;
+    if (dis_1 <= a[0])
+        damage++;
+    if (dis_2 <= a[0])
+        damage++;
+    if (dis_3 <= a[0])
+        damage++;
+
+    return damage;
 }
 
 int main()
 {
-    int a[2];
+    int a[9];
     while (cin >> a[0]) {
-        cin >> a[1];
-        // cout << a[0] << " " << a[1] << endl;
+        for (int i = 1; i < 9; i++)
+            cin >> a[i];
 
-        int b[100000];
-        for (int i = 0; i < a[0]; i++) {
-            cin >> b[i];
-        }
-        // cout << b[2] << endl;
-        cout << upgrade(a, b) << endl;
+        cout << ko(a) << "x" << endl;
     }
-
-    // system("PAUSE");
+    //system("PAUSE");
 
     return 0;
 }
