@@ -1,38 +1,61 @@
 #include <iostream>
 #include <stdlib.h>
-#include <stdio.h>
-#include <math.h>
 
 using namespace std;
 
-int ko(int a[])
+int a[1000][1000];
+
+int last_num(int num)
 {
-	float dis_1, dis_2, dis_3;
-	dis_1 = sqrt((a[1] - a[7]) * (a[1] - a[7]) + (a[2] - a[8]) * (a[2] - a[8]));
-	dis_2 = sqrt((a[3] - a[7]) * (a[3] - a[7]) + (a[4] - a[8]) * (a[4] - a[8]));
-	dis_3 = sqrt((a[5] - a[7]) * (a[5] - a[7]) + (a[6] - a[8]) * (a[6] - a[8]));
+	if (num > 1000)
+		num = 1000;
 
-	int damage = 0;
-	if (dis_1 <= a[0])
-		damage++;
-	if (dis_2 <= a[0])
-		damage++;
-	if (dis_3 <= a[0])
-		damage++;
+	int del_point = 2;
+	int arr_index = 0;
+	int count = 0;
 
-	return damage;
+	for (int i = 0; i < num; i++) {
+		a[arr_index][i] = i;
+	}
+
+	int sub_count = 0;
+	while (1) {
+		if (num - count == 1)
+			break;
+
+		if (del_point <= (num - 1 - count)) {
+			a[arr_index][del_point] = -1;
+			sub_count++;
+			del_point = del_point + 3;
+		}
+		else {
+			del_point = del_point - (num - count);
+
+			int j = 0;
+			for (int i = 0; i < num; i++) {
+				if (a[arr_index][i] != -1) {
+					a[arr_index + 1][j] = a[arr_index][i];
+					j++;
+				}
+			}
+			arr_index++;
+			count = count + sub_count;
+			sub_count = 0;
+		}
+		if (num - count == 1)
+			break;
+	}
+
+	int value_ = a[arr_index][0];
+	return value_;
 }
 
 int main()
 {
-	int a[9];
-	while (cin >> a[0]) {
-		for (int i = 1; i < 9; i++)
-			cin >> a[i];
-
-		cout << ko(a) << "x" << endl;
+	int n;
+	while (cin >> n) {
+		cout << last_num(n) << endl;
 	}
-	//system("PAUSE");
 
 	return 0;
 }
