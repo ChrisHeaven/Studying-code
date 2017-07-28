@@ -1,50 +1,65 @@
 #include <iostream>
 #include <stdlib.h>
 #include <vector>
+#include <string>
 
 using namespace std;
 
-int b[200000];
+class Solution {
+public:
+	/**
+	* 计算你能获得的最大收益
+	*
+	* @param prices Prices[i]即第i天的股价
+	* @return 整型
+	*/
+	int calculateMax(vector<int> prices) {
+		int first_max = 0;
+		int second_max = 0;
+		int sum = 0, sum_1 = 0, sum_2 = 0;
 
-int get_num(int a[], int b[])
-{
-	int type_count = 0;
-	int num_count = 0;
-	int sum = 0;
-	int last = 0;
+		for (int i = 0; i < prices.size(); i++)
+		{
+			for (int j = 0; j < i; j++) {
+				for (int k = j + 1; k < i; k++)
+					if (prices[k] - prices[j] > first_max)
+						first_max = prices[k] - prices[j];
+			}
+			for (int j = i; j < prices.size(); j++) {
+				for (int k = j + 1; k < prices.size(); k++)
+					if (prices[k] - prices[j] > second_max)
+						second_max = prices[k] - prices[j];
+			}
 
-	for (int j = 0; j < a[2]; j++) {
-		sum = sum + b[j];
+			if (first_max > 0)
+				sum_1 = first_max;
+			if (second_max > 0)
+				sum_2 = second_max;
+
+			if (sum_1 + sum_2 >= sum)
+				sum = sum_1 + sum_2;
+
+			first_max = 0;
+			second_max = 0;
+			sum_1 = 0;
+			sum_2 = 0;
+		}
+		return sum;
 	}
-	if (sum <= a[1])
-		type_count++;
-
-	for (int i = 0; i < a[0] - a[2]; i++)
-	{
-		sum = sum - b[i] + b[i + a[2]];
-		if (sum <= a[1])
-			type_count++;
-	}
-
-	return type_count;
-}
+};
 
 int main()
 {
-	int a[3];
-	//while (cin >> a[0]) {
-	//	cin >> a[1];
-	//	cin >> a[2];
+	//vector<int> prices = { 61,8,81,67,80,47 };
+	//Solution s;
+	//cout << s.calculateMax(prices) << endl;
+	//system("PAUSE");
 
-	//	for (int i = 0; i < a[0]; i++) {
-	//		cin >> b[i];
-	//	}
+	string a;
+	while (cin >> a)
+	{
+		cout << a[1] << endl;
+	}
 
-	//	cout << get_num(a, b) << endl;
-	//}
-
-	vector<vector<int> > f = { {2, 2},{3, 3},{4, 4} };
-	cout << f[0][1] << f[1][0] << endl;
-	system("PAUSE");
 	return 0;
 }

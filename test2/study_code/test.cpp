@@ -1,44 +1,58 @@
-class Flip {
+#include <iostream>
+#include <stdlib.h>
+#include <vector>
+
+using namespace std;
+
+class Solution {
 public:
-    vector<vector<int> > flipChess(vector<vector<int> > A, vector<vector<int> > f) {
-        // write code here
-        for (int i = 0; i < 3; i++)
+    /**
+    * 计算你能获得的最大收益
+    *
+    * @param prices Prices[i]即第i天的股价
+    * @return 整型
+    */
+    int calculateMax(vector<int> prices) {
+        int first_max = 0;
+        int second_max = 0;
+        int sum = 0, sum_1 = 0, sum_2 = 0;
+
+        for (int i = 0; i < prices.size(); i++)
         {
-            int row = f[i][0] - 1;
-            int col = f[i][1] - 1;
-
-            if (row - 1 >= 0)
-            {
-                if (A[row - 1][col] == 0)
-                    A[row - 1][col] = 1;
-                else
-                    A[row - 1][col] = 0;
+            for (int j = 0; j < i; j++) {
+                for (int k = j + 1; k < i; k++)
+                    if (prices[k] - prices[j] > first_max)
+                        first_max = prices[k] - prices[j];
+            }
+            for (int j = i; j < prices.size(); j++) {
+                for (int k = j + 1; k < prices.size(); k++)
+                    if (prices[k] - prices[j] > second_max)
+                        second_max = prices[k] - prices[j];
             }
 
-            if (row + 1 < 4)
-            {
-                if (A[row + 1][col] == 0)
-                    A[row + 1][col] = 1;
-                else
-                    A[row + 1][col] = 0;
-            }
+            if (first_max > 0)
+                sum_1 = first_max;
+            if (second_max > 0)
+                sum_2 = second_max;
 
-            if (col - 1 >= 0)
-            {
-                if (A[row][col - 1] == 0)
-                    A[row][col - 1] = 1;
-                else
-                    A[row][col - 1] = 0;
-            }
+            if (sum_1 + sum_2 >= sum)
+                sum = sum_1 + sum_2;
 
-            if (col + 1 < 4)
-            {
-                if (A[row][col + 1] == 0)
-                    A[row][col + 1] = 1;
-                else
-                    A[row][col + 1] = 0;
-            }
+            first_max = 0;
+            second_max = 0;
+            sum_1 = 0;
+            sum_2 = 0;
         }
-        return A;
+        return sum;
     }
 };
+
+int main()
+{
+    vector<int> prices = { 61, 8, 81, 67, 80, 47 };
+    Solution s;
+    cout << s.calculateMax(prices) << endl;
+    system("PAUSE");
+
+    return 0;
+}
