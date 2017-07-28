@@ -3,59 +3,43 @@
 
 using namespace std;
 
-int a[1000][1000];
+int b[200000];
 
-int last_num(int num)
+int get_num(int a[], int b[])
 {
-	if (num > 1000)
-		num = 1000;
+	int type_count = 0;
+	int num_count = 0;
+	int sum = 0;
+	int last = 0;
 
-	int del_point = 2;
-	int arr_index = 0;
-	int count = 0;
+	for (int j = 0; j < a[2]; j++) {
+		sum = sum + b[j];
+	}
+	if (sum <= a[1])
+		type_count++;
 
-	for (int i = 0; i < num; i++) {
-		a[arr_index][i] = i;
+	for (int i = 0; i < a[0] - a[2]; i++)
+	{
+		sum = sum - b[i] + b[i + a[2]];
+		if (sum <= a[1])
+			type_count++;
 	}
 
-	int sub_count = 0;
-	while (1) {
-		if (num - count == 1)
-			break;
-
-		if (del_point <= (num - 1 - count)) {
-			a[arr_index][del_point] = -1;
-			sub_count++;
-			del_point = del_point + 3;
-		}
-		else {
-			del_point = del_point - (num - count);
-
-			int j = 0;
-			for (int i = 0; i < num; i++) {
-				if (a[arr_index][i] != -1) {
-					a[arr_index + 1][j] = a[arr_index][i];
-					j++;
-				}
-			}
-			arr_index++;
-			count = count + sub_count;
-			sub_count = 0;
-		}
-		if (num - count == 1)
-			break;
-	}
-
-	int value_ = a[arr_index][0];
-	return value_;
+	return type_count;
 }
 
 int main()
 {
-	int n;
-	while (cin >> n) {
-		cout << last_num(n) << endl;
-	}
+	int a[3];
+	while (cin >> a[0]) {
+		cin >> a[1];
+		cin >> a[2];
 
+		for (int i = 0; i < a[0]; i++) {
+			cin >> b[i];
+		}
+
+		cout << get_num(a, b) << endl;
+	}
 	return 0;
 }
