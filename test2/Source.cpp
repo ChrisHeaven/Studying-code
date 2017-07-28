@@ -1,5 +1,6 @@
 #include <iostream>
 #include <stdlib.h>
+#include <vector>
 
 using namespace std;
 
@@ -31,15 +32,19 @@ int get_num(int a[], int b[])
 int main()
 {
 	int a[3];
-	while (cin >> a[0]) {
-		cin >> a[1];
-		cin >> a[2];
+	//while (cin >> a[0]) {
+	//	cin >> a[1];
+	//	cin >> a[2];
 
-		for (int i = 0; i < a[0]; i++) {
-			cin >> b[i];
-		}
+	//	for (int i = 0; i < a[0]; i++) {
+	//		cin >> b[i];
+	//	}
 
-		cout << get_num(a, b) << endl;
-	}
+	//	cout << get_num(a, b) << endl;
+	//}
+
+	vector<vector<int> > f = { {2, 2},{3, 3},{4, 4} };
+	cout << f[0][1] << f[1][0] << endl;
+	system("PAUSE");
 	return 0;
 }

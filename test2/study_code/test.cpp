@@ -1,59 +1,44 @@
-#include <iostream>
-#include <stdlib.h>
+class Flip {
+public:
+    vector<vector<int> > flipChess(vector<vector<int> > A, vector<vector<int> > f) {
+        // write code here
+        for (int i = 0; i < 3; i++)
+        {
+            int row = f[i][0] - 1;
+            int col = f[i][1] - 1;
 
-using namespace std;
+            if (row - 1 >= 0)
+            {
+                if (A[row - 1][col] == 0)
+                    A[row - 1][col] = 1;
+                else
+                    A[row - 1][col] = 0;
+            }
 
-int b[200000];
+            if (row + 1 < 4)
+            {
+                if (A[row + 1][col] == 0)
+                    A[row + 1][col] = 1;
+                else
+                    A[row + 1][col] = 0;
+            }
 
-int get_num(int a[], int b[])
-{
-    int type_count = 0;
-    int num_count = 0;
-    int sum = 0;
-    int last = 0;
+            if (col - 1 >= 0)
+            {
+                if (A[row][col - 1] == 0)
+                    A[row][col - 1] = 1;
+                else
+                    A[row][col - 1] = 0;
+            }
 
-    for (int j = 0; j < a[2]; j++) {
-        sum = sum + b[j];
-    }
-    if (sum <= a[1]) {
-        type_count++;
-        // num_count = 0;
-        // t = 0;
-    }
-
-    for (int i = 0; i < a[0] - a[2]; i++)
-    {
-        // for (int j = i; j < i + a[2]; j++) {
-        //     t = t + b[j];
-        //     last = b[j + 1];
-        // }
-        sum = sum - b[i] + b[i + a[2]];
-        if (sum <= a[1]) {
-            type_count++;
-            // num_count = 0;
-            // t = 0;
+            if (col + 1 < 4)
+            {
+                if (A[row][col + 1] == 0)
+                    A[row][col + 1] = 1;
+                else
+                    A[row][col + 1] = 0;
+            }
         }
+        return A;
     }
-
-    return type_count;
-}
-
-int main()
-{
-    int a[3];
-    while (cin >> a[0]) {
-        cin >> a[1];
-        cin >> a[2];
-
-        for (int i = 0; i < a[0]; i++) {
-            cin >> b[i];
-        }
-
-        cout << get_num(a, b) << endl;
-
-        // cout << a[0] << a[1] << a[2] << endl;
-        // cout << b[1] << endl;
-    }
-
-    return 0;
-}
+};
