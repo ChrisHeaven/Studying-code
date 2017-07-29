@@ -2,49 +2,43 @@
 #include <stdlib.h>
 #include <vector>
 #include <string>
+#include <math.h>
 
 using namespace std;
 
-class Apples {
-public:
-    int getInitial(int n) {
-        // write code here
-        int min_ = 0;
-        for (int i = n + 1;; i++) {
-            int flag = 0;
-            int apple_num = i;
-            for (int j = 0; j < n; j++) {
-                //if (j == n - 1 && apple_num == 1) {
-                //  flag = 1;
-                //  break;
-                //}
-
-                if (apple_num % n != 1)
-                {
-                    flag = 1;
-                    break;
-                }
-
-                int result = apple_num / n;
-                apple_num = apple_num - 1 - result;
-            }
-
-            if (flag == 0) {
-                min_ = i;
-                break;
-            }
-        }
-        return min_;
+int get_max_dis(int n, int str[]) {
+    int max_dis = 0, dis = 0, deleted_dis = 0;
+    for (int i = 0; i < n - 1; i++)
+    {
+        dis = str[i + 1] - str[i];
+        if (dis > max_dis)
+            max_dis = dis;
     }
-};
+
+    int min_max = 1001;
+    for (int i = 0; i < n - 2; i++)
+    {
+        deleted_dis = str[i + 2] - str[i];
+        if (deleted_dis < min_max)
+            min_max = deleted_dis;
+    }
+
+    if (max_dis < min_max)
+        max_dis = min_max;
+
+    return max_dis;
+}
 
 int main()
 {
-    int n = 3;
-    Apples s;
-    cout << s.getInitial(n) << endl;
-
-    system("PAUSE");
+    int n;
+    int str[100];
+    while (cin >> n) {
+        for (int i = 0; i < n; i++) {
+            cin >> str[i];
+        }
+        cout << get_max_dis(n, str) << endl;
+    }
 
     return 0;
 }
