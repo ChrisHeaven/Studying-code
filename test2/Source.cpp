@@ -6,38 +6,31 @@
 
 using namespace std;
 
-int get_max_dis(int n, int str[]) {
-	int max_dis = 0, dis = 0, deleted_dis = 0;
-	for (int i = 0; i < n - 1; i++)
-	{
-		dis = str[i + 1] - str[i];
-			if (dis > max_dis)
-				max_dis = dis;
-	}
-
-	int min_max = 1001;
-	for (int i = 0; i < n - 2; i++)
-	{
-		deleted_dis = str[i + 2] - str[i];
-		if (deleted_dis < min_max)
-			min_max = deleted_dis;
-	}
-
-	if (max_dis < min_max)
-		max_dis = min_max;
-
-	return max_dis;
+int move(int r, double point_1[], double point_2[]) {
+	double dis = sqrt((point_1[0] - point_2[0]) * (point_1[0] - point_2[0]) + (point_1[1] - point_2[1]) * (point_1[1] - point_2[1]));
+	int pre_step = dis / (2 * r);
+	int step = 0;
+	if (dis > pre_step * (2 * r))
+		step = pre_step + 2;
+	else
+		step = pre_step;
+	return step;
 }
 
 int main()
 {
-	int n;
-	int str[100];
-	while (cin >> n) {
-		for (int i = 0; i < n; i++) {
-			cin >> str[i];
+	int r;
+	double point_1[2], point_2[2];
+	while (cin >> r) {
+		for (int i = 0; i < 2; i++)
+		{
+			cin >> point_1[i];
 		}
-		cout << get_max_dis(n, str) << endl;
+		for (int i = 0; i < 2; i++)
+		{
+			cin >> point_2[i];
+		}
+		cout << move(r, point_1, point_2) << endl;
 	}
 
 	return 0;
