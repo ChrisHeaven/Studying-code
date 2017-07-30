@@ -3,58 +3,92 @@
 #include <vector>
 #include <string>
 #include <math.h>
-#include<iomanip>
+#include <iomanip>
 
 using namespace std;
 
-float poss[1000][1000];
-float max_poss = 0;
+long long int Triangle[1000][1000];
+
+class Visit {
+public:
+
+    int triangle(long long int Triangle[1000][1000], int block_point[100][2])
+    {
+        Triangle[1][1] = 1;
+        Triangle[2][1] = 1; Triangle[2][2] = 1;
+
+        for (int i = 3; i <= 10; i++)
+        {
+            for (int j = 1; j <= i; j++)
+            {
+                int flag = 0;
+                for (int k = 0; k < 100; k++)
+                {
+                    if (block_point[k][0] == i && block_point[k][1] == j)
+                    {
+                        flag = 1;
+                        break;
+                    }
+                }
+                if (flag == 1)
+                    Triangle[i][j] = 0;
+                else
+                    Triangle[i][j] = Triangle[i - 1][j - 1] + Triangle[i - 1][j];
+            }
+        }
+        return 0;
+    }
+
+    int countPath(vector<vector<int> > map, int n, int m) {
+        // write code here
+        int man_pos[2], buss_pos[2];
+        int block_point[100][2];
+        int k = 0;
+
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = 0; j < m; j++)
+            {
+                if (map[i][j] == 1)
+                {
+                    man_pos[0] = i;
+                    man_pos[1] = j;
+                }
+                if (map[i][j] == 2)
+                {
+                    buss_pos[0] = i;
+                    buss_pos[1] = j;
+                }
+                if (map[i][j] == -1)
+                {
+                    block_point[k][0] = i;
+                    block_point[k][1] = j;
+                    k++;
+                }
+            }
+        }
+
+        int row_diff = abs(man_pos[0] - buss_pos[0]);
+        int col_diff = abs(man_pos[1] - buss_pos[1]);
+
+        int step = row_diff + col_diff;
+        int num = (step + 1 - (abs(buss_pos[0] - man_pos[0]) + 1)) + 1;
+
+        triangle(Triangle, block_point);
+
+        int path_num = Triangle[step + 1][num];
+        //cout << path_num << endl;
+        return path_num;
+    }
+};
 
 int main()
 {
-    int str[5];
-    while (cin >> str[0]) {
-        for (int i = 1; i < 5; i++)
-        {
-            cin >> str[i];
-        }
-
-        for (int i = 0; i < str[0]; i++) {
-            for (int j = 0; j < str[1]; j++) {
-                cin >> poss[i][j];
-            }
-        }
-
-        float cc_poss = 0, ss_poss = 0;
-        cc_poss = poss[str[2] - 1][str[3] - 1];
-        float sum = 0;
-
-        for (int i = 0; i < str[0]; i++) {
-            for (int j = 0; j < str[1]; j++) {
-                sum = sum + poss[i][j];
-            }
-        }
-
-        ss_poss = sum / (str[0] * str[1]);
-
-        cc_poss = 1 - pow(1 - cc_poss, str[4]);
-        ss_poss = 1 - pow(1 - ss_poss, str[4]);
-
-        if (ss_poss > cc_poss) {
-            max_poss = ss_poss;
-            cout << "ss" << endl;
-        }
-        else if (cc_poss > ss_poss) {
-            max_poss = cc_poss;
-            cout << "cc" << endl;
-        }
-        else if (cc_poss == ss_poss) {
-            max_poss = cc_poss;
-            cout << "equal" << endl;
-        }
-
-        cout << fixed << setprecision(2) << max_poss << endl;
-    }
+    vector<vector<int> > map = { {0}, {0}, {2}, {1}};
+    int n = 4, m = 1;
+    Visit s;
+    cout << s.countPath(map, n, m) << endl;
+    system("PAUSE");
 
     return 0;
 }
