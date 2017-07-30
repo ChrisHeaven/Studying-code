@@ -7,62 +7,54 @@
 
 using namespace std;
 
-float count_d(int str[2], int light[1000])
-{
-	int sort_light[1000] = { 0 };
-	for (int i = 0; i < str[0]; i++)
-	{
+class StringFormat {
+public:
+	string formatString(string A, int n, vector<char> arg, int m) {
+		// write code here
 		int count = 0;
-		for (int j = 0; j < str[0]; j++)
+		for (int i = 0; i < n; i++)
 		{
-			if (light[i] <= light[j])
-				count++;
-		}
-		if (sort_light[str[0] - count] == 0)
-			sort_light[str[0] - count] = light[i];
-		else
-		{
-			for (int k = str[0] - count + 1; k < str[0]; k++)
+			if (A[i] == '%' && A[i + 1] == 's')
 			{
-				if (sort_light[k] == 0)
-					sort_light[k] = light[i];
+				A[i] = arg[count];
+				A[i + 1] = -1;
+				count++;
 			}
 		}
+
+		int last = 0;
+		if (m > count)
+		{
+			last = m - count;
+			for (int j = n; j < n + last; j++)
+			{
+				A.push_back(arg[count]);
+				count++;
+			}
+		}
+
+		string B;
+		for (int i = 0; i < n + last; i++)
+		{
+			if (A[i] != -1)
+			{
+				B.push_back(A[i]);
+			}
+		}
+		return B;
 	}
-
-	int start_dis = sort_light[0] - 0 + 1;
-	int end_dis = str[1] - sort_light[str[0] - 1] + 1;
-
-	float max_dis = 0;
-	for (int i = 0; i < str[0] - 1; i++)
-	{
-		if (abs(sort_light[i + 1] - sort_light[i]) >= max_dis)
-			max_dis = abs(sort_light[i + 1] - sort_light[i]);
-	}
-
-	max_dis = max_dis / 2.0;
-
-	if (start_dis > max_dis)
-		max_dis = start_dis;
-	if (end_dis > max_dis)
-		max_dis = end_dis;
-
-	return max_dis;
-}
+};
 
 int main()
 {
-	int str[2], light[1000];
-	while (cin >> str[0] >> str[1])
-	{
-		for (int i = 0; i < str[0]; i++)
-		{
-			cin >> light[i];
-			light[i] = light[i] + 1;
- 		}
+	string A = "ELK";
+	int n = 3, m = 1;
+	vector<char> arg = {'H'};
+	StringFormat s;
 
-		cout << fixed << setprecision(2) << count_d(str, light) << endl;
-	}
+	cout << s.formatString(A, n, arg, m) << endl;
+
+	system("PAUSE");
 
 	return 0;
 }
