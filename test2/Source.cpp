@@ -7,52 +7,76 @@
 
 using namespace std;
 
-class Bonus {
-public:
-	int getMost(vector<vector<int> > board) {
-		// write code here
+int get_marsh(int map[20][20], int n, int m) {
+	int count = 0, max_count = 0, max_row = 0, max_col = 0, total_count = 0;
 
-
-		for (int i = 0; i < 6; i++)
+	for (int k = 0; k < 2; k++) {
+		for (int i = 0; i < n - 2; i++)
 		{
-			/* code */
-			for (int j = 0; j < 6; j++)
+			for (int j = 0; j < m - 2; j++)
 			{
-				if (i == 0 && j == 0)
-					board[i][j] = board[i][j];
-				if (i == 0 && j != 0)
-					board[i][j] = board[i][j] + board[i][j - 1];
-				if (i != 0 && j == 0)
-					board[i][j] = board[i][j] + board[i - 1][j];
-				if (i != 0 && j != 0)
+				for (int a = 0; a < 3; a++)
 				{
-					if (board[i - 1][j] >= board[i][j - 1])
-						board[i][j] = board[i][j] + board[i - 1][j];
-					else
-						board[i][j] = board[i][j] + board[i][j - 1];
+					for (int b = 0; b < 3; b++)
+					{
+						if (map[i + a][j + b] > 0)
+							count++;
+					}
 				}
+
+				if (max_count < count)
+				{
+					max_row = i;
+					max_col = j;
+					max_count = count;
+				}
+				count = 0;
 			}
 		}
 
-		return board[5][5];
+		for (int a = 0; a < 3; a++)
+		{
+			for (int b = 0; b < 3; b++)
+			{
+				if (map[max_row + a][max_col + b] > 0)
+					map[max_row + a][max_col + b]--;
+			}
+		}
+
+		total_count = total_count + max_count;
+		max_count = 0;
 	}
-};
+
+	return total_count;
+}
 
 int main()
 {
-	vector<vector<int> > board = {
-		{ 564, 448, 654, 186, 490, 699 },
-		{ 487, 444, 563, 228, 365, 261 },
-		{ 429, 505, 612, 564, 715, 726 },
-		{ 464, 617, 234, 647, 702, 263 },
-		{ 245, 249, 231, 462, 453, 646 },
-		{ 669, 510, 492, 512, 622, 135 }
-	};
-	Bonus s;
+	int n, m, k, x, y;
+	int map[20][20] = { 0 };
 
-	cout << s.getMost(board) << endl;
+	while (cin >> n)
+	{
+		cin >> m;
+		cin >> k;
 
-	system("PAUSE");
+		for (int i = 0; i < k; i++)
+		{
+			cin >> x;
+			cin >> y;
+			map[x][y]++;
+		}
+
+		cout << get_marsh(map, n, m) << endl;
+
+		for (int i = 0; i < n; i++)
+		{
+			for (int j = 0; j < m; j++)
+			{
+				map[i][j] = 0;
+			}
+		}
+	}
 
 	return 0;
 }
