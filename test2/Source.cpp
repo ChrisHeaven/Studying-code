@@ -7,52 +7,50 @@
 
 using namespace std;
 
-class StringFormat {
+class Bonus {
 public:
-	string formatString(string A, int n, vector<char> arg, int m) {
+	int getMost(vector<vector<int> > board) {
 		// write code here
-		int count = 0;
-		for (int i = 0; i < n; i++)
+
+
+		for (int i = 0; i < 6; i++)
 		{
-			if (A[i] == '%' && A[i + 1] == 's')
+			/* code */
+			for (int j = 0; j < 6; j++)
 			{
-				A[i] = arg[count];
-				A[i + 1] = -1;
-				count++;
+				if (i == 0 && j == 0)
+					board[i][j] = board[i][j];
+				if (i == 0 && j != 0)
+					board[i][j] = board[i][j] + board[i][j - 1];
+				if (i != 0 && j == 0)
+					board[i][j] = board[i][j] + board[i - 1][j];
+				if (i != 0 && j != 0)
+				{
+					if (board[i - 1][j] >= board[i][j - 1])
+						board[i][j] = board[i][j] + board[i - 1][j];
+					else
+						board[i][j] = board[i][j] + board[i][j - 1];
+				}
 			}
 		}
 
-		int last = 0;
-		if (m > count)
-		{
-			last = m - count;
-			for (int j = n; j < n + last; j++)
-			{
-				A.push_back(arg[count]);
-				count++;
-			}
-		}
-
-		string B;
-		for (int i = 0; i < n + last; i++)
-		{
-			if (A[i] != -1)
-			{
-				B.push_back(A[i]);
-			}
-		}
-		return B;
+		return board[5][5];
 	}
 };
 
 int main()
 {
-	string A = "ELK";
-	int n = 3, m = 1;
-	vector<char> arg = {'H'};
-	StringFormat s;
+	vector<vector<int> > board = {
+		{ 564, 448, 654, 186, 490, 699 },
+		{ 487, 444, 563, 228, 365, 261 },
+		{ 429, 505, 612, 564, 715, 726 },
+		{ 464, 617, 234, 647, 702, 263 },
+		{ 245, 249, 231, 462, 453, 646 },
+		{ 669, 510, 492, 512, 622, 135 }
+	};
+	Bonus s;
 
-	cout << s.formatString(A, n, arg, m) << endl;
+	cout << s.getMost(board) << endl;
 
 	system("PAUSE");
 
