@@ -7,75 +7,67 @@
 
 using namespace std;
 
-int get_marsh(int map[20][20], int n, int m) {
-	int count = 0, max_count = 0, max_row = 0, max_col = 0, total_count = 0;
+int fibo[] = { 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89 };
 
-	for (int k = 0; k < 2; k++) {
-		for (int i = 0; i < n - 2; i++)
+int get_lucky(char str[100], int length) {
+	// write code here
+
+	char storage[500][100] = { "" };
+	int store_count = 0;
+	for (int a = 0; a < 100; a++)
+	{
+		for (int i = 0; i < length - (a - 1); i++)
 		{
-			for (int j = 0; j < m - 2; j++)
+			int lex[26] = { 0 };
+			char buff[100] = { "" };
+			for (int j = i; j < i + a; j++)
 			{
-				for (int a = 0; a < 3; a++)
-				{
-					for (int b = 0; b < 3; b++)
-					{
-						if (map[i + a][j + b] > 0)
-							count++;
-					}
-				}
+				int index = int(str[j]) - 97;
+				if (lex[index] == 0)
+					lex[index] = 1;
+				buff[j - i] = str[j];
+			}
 
-				if (max_count < count)
+			int count = 0;
+			for (int k = 0; k < 26; k++)
+			{
+				if (lex[k] == 1)
+					count++;
+			}
+
+			for (int k = 0; k < 12; k++)
+			{
+				if (count == fibo[k])
 				{
-					max_row = i;
-					max_col = j;
-					max_count = count;
+					for (int j = 0; j < a; j++)
+						storage[store_count][j] = buff[j];
+					store_count++;
+					break;
 				}
-				count = 0;
 			}
 		}
-
-		for (int a = 0; a < 3; a++)
-		{
-			for (int b = 0; b < 3; b++)
-			{
-				if (map[max_row + a][max_col + b] > 0)
-					map[max_row + a][max_col + b]--;
-			}
-		}
-
-		total_count = total_count + max_count;
-		max_count = 0;
 	}
 
-	return total_count;
+	for (int i = 0; i < store_count; i++)
+	{
+		cout << storage[i] << endl;
+	}
+	return 0;
 }
 
 int main()
 {
-	int n, m, k, x, y;
-	int map[20][20] = { 0 };
-
-	while (cin >> n)
+	char str[100] = { "" };
+	string s;
+	while (cin >> s)
 	{
-		cin >> m;
-		cin >> k;
-
-		for (int i = 0; i < k; i++)
+		//cout << str.size() << endl;
+		for (int i = 0; i < s.size(); i++)
 		{
-			cin >> x;
-			cin >> y;
-			map[x][y]++;
+			str[i] = s.at(i);
 		}
-
-		cout << get_marsh(map, n, m) << endl;
-
-		for (int i = 0; i < n; i++)
-		{
-			for (int j = 0; j < m; j++)
-			{
-				map[i][j] = 0;
-			}
-		}
+		int length = s.size();
+		get_lucky(str, length);
 	}
 
 	return 0;

@@ -7,67 +7,71 @@
 
 using namespace std;
 
-int get_marsh(int map[20][20], int n, int m) {
-    int count = 0, max_count = 0, max_row = 0, max_col = 0, total_count = 0;
+int fibo[] = { 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89 };
 
-    for (int k = 0; k < 2; k++) {
-        for (int i = 0; i < n - 2; i++)
+int get_lucky(string str) {
+    // write code here
+
+    char storage[500][100];
+    int store_count = 0;
+    for (int a = 0; a < 100; a++)
+    {
+        for (int i = 0; i < str.size() - (a - 1); i++)
         {
-            for (int j = 0; j < m - 2; j++)
+            int lex[26] = {0};
+            string buff;
+            for (int j = i; j < (a - 1); j++)
             {
-                for (int a = 0; a < 3; a++)
-                {
-                    for (int b = 0; b < 3; b++)
-                    {
-                        if (map[i + a][j + b] > 0)
-                            count++;
-                    }
-                }
-
-                if (max_count < count)
-                {
-                    max_row = i;
-                    max_col = j;
-                    max_count = count;
-                }
-                count = 0;
+                int index = int (str[j]) - 97;
+                if (lex[index] == 0)
+                    lex[index] = 1;
+                buff.push_back(str[j]);
             }
-        }
 
-        for (int a = 0; a < 3; a++)
-        {
-            for (int b = 0; b < 3; b++)
+            int count = 0;
+            for (int k = 0; k < 26; k++)
             {
-                if (map[max_row + a][max_col + b] > 0)
-                    map[max_row + a][max_col + b]--;
+                if (lex[index] == 0)
+                    count++;
             }
-        }
 
-        total_count = total_count + max_count;
-        max_count = 0;
+            for (int k = 0; k < 12; k++)
+            {
+                if (count == fibo[k])
+                {
+                    for (int j = 0; j < buff.size(); j++)
+                        storage[store_count][j] = buff[j];
+                }
+            }
+            store_count++;
+        }
     }
 
-    return total_count;
+    for (int i = 0; i < store_count; i++)
+    {
+        for (int j = 0; j < 100; j++)
+        {
+            cout << storage[i][j] << endl;
+        }
+    }
+    return 0;
 }
 
 int main()
 {
-    int n, m, k, x, y;
-    int map[20][20] = { 0 };
-
-    while (cin >> n)
+    string str;
+    while (cin >> str)
     {
-        cin >> m;
-        cin >> k;
-        for (int i = 0; i < k; i++)
-        {
-            cin >> x;
-            cin >> y;
-            map[x][y]++;
-        }
-
-        cout << get_marsh(map, n, m) << endl;
+        get_lucky(str);
     }
+
+    // char a, b;
+    // cin >> a;
+    // cin >> b;
+
+    // cout << (int)a - (int)b << endl;
+
+    // system("PAUSE");
 
     return 0;
 }
