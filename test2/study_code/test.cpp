@@ -9,29 +9,29 @@ using namespace std;
 
 int fibo[] = { 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89 };
 
-int get_lucky(string str) {
+int get_lucky(char str[100], int length) {
     // write code here
 
-    char storage[500][100];
+    char storage[500][100] = { "" };
     int store_count = 0;
     for (int a = 0; a < 100; a++)
     {
-        for (int i = 0; i < str.size() - (a - 1); i++)
+        for (int i = 0; i < length - (a - 1); i++)
         {
-            int lex[26] = {0};
-            string buff;
-            for (int j = i; j < (a - 1); j++)
+            int lex[26] = { 0 };
+            char buff[100] = { "" };
+            for (int j = i; j < i + a; j++)
             {
-                int index = int (str[j]) - 97;
+                int index = int(str[j]) - 97;
                 if (lex[index] == 0)
                     lex[index] = 1;
-                buff.push_back(str[j]);
+                buff[j - i] = str[j];
             }
 
             int count = 0;
             for (int k = 0; k < 26; k++)
             {
-                if (lex[index] == 0)
+                if (lex[k] == 1)
                     count++;
             }
 
@@ -39,39 +39,36 @@ int get_lucky(string str) {
             {
                 if (count == fibo[k])
                 {
-                    for (int j = 0; j < buff.size(); j++)
+                    for (int j = 0; j < a; j++)
                         storage[store_count][j] = buff[j];
+                    store_count++;
+                    break;
                 }
             }
-            store_count++;
         }
     }
 
     for (int i = 0; i < store_count; i++)
     {
-        for (int j = 0; j < 100; j++)
-        {
-            cout << storage[i][j] << endl;
-        }
+        cout << storage[i] << endl;
     }
     return 0;
 }
 
 int main()
 {
-    string str;
-    while (cin >> str)
+    char str[100] = { "" };
+    string s;
+    while (cin >> s)
     {
-        get_lucky(str);
+        //cout << str.size() << endl;
+        for (int i = 0; i < s.size(); i++)
+        {
+            str[i] = s.at(i);
+        }
+        int length = s.size();
+        get_lucky(str, length);
     }
-
-    // char a, b;
-    // cin >> a;
-    // cin >> b;
-
-    // cout << (int)a - (int)b << endl;
-
-    // system("PAUSE");
 
     return 0;
 }
