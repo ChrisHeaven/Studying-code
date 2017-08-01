@@ -14,7 +14,7 @@ int get_lucky(char str[100], int length) {
 
 	char storage[500][100] = { "" };
 	int store_count = 0;
-	for (int a = 0; a < 100; a++)
+	for (int a = 1; a < length; a++)
 	{
 		for (int i = 0; i < length - (a - 1); i++)
 		{
@@ -37,12 +37,26 @@ int get_lucky(char str[100], int length) {
 
 			for (int k = 0; k < 12; k++)
 			{
+				int flag = 0;
 				if (count == fibo[k])
 				{
-					for (int j = 0; j < a; j++)
-						storage[store_count][j] = buff[j];
-					store_count++;
-					break;
+					for (int j = 0; j < store_count; j++)
+					{
+						if (strcmp(storage[j], buff) == 0) 
+						{
+							flag = 1;
+							break;
+						}
+					}
+					if (flag) 
+						break;
+					else 
+					{
+						for (int j = 0; j < a; j++)
+							storage[store_count][j] = buff[j];
+						store_count++;
+						break;
+					}
 				}
 			}
 		}
