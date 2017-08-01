@@ -2,17 +2,19 @@
 #include <stdlib.h>
 #include <vector>
 #include <string>
+#include <string.h>
 #include <math.h>
 #include <iomanip>
 
 using namespace std;
 
 int fibo[] = { 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89 };
+char storage[5000][100] = { "" };
+int sorted_storage[5000] = { 0 };
 
 int get_lucky(char str[100], int length) {
 	// write code here
 
-	char storage[500][100] = { "" };
 	int store_count = 0;
 	for (int a = 1; a < length; a++)
 	{
@@ -62,13 +64,12 @@ int get_lucky(char str[100], int length) {
 		}
 	}
 
-	int sorted_storage[500] = { 0 };
 	for (int i = 0; i < store_count; i++)
 	{
 		int min_count = 0;
 		for (int j = 0; j < store_count; j++)
 		{
-			if ((int)storage[i][0] <= (int)storage[j][0])
+			if (strcmp(storage[i],storage[j]) <= 0)
 				min_count++;
 		}
 
@@ -91,6 +92,8 @@ int get_lucky(char str[100], int length) {
 	{
 		cout << storage[sorted_storage[i] - 1] << endl;
 	}
+
+	//cout << store_count << endl;
 	return 0;
 }
 
