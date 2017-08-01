@@ -14,7 +14,7 @@ int get_lucky(char str[100], int length) {
 
     char storage[500][100] = { "" };
     int store_count = 0;
-    for (int a = 0; a < 100; a++)
+    for (int a = 1; a < length; a++)
     {
         for (int i = 0; i < length - (a - 1); i++)
         {
@@ -37,11 +37,50 @@ int get_lucky(char str[100], int length) {
 
             for (int k = 0; k < 12; k++)
             {
+                int flag = 0;
                 if (count == fibo[k])
                 {
-                    for (int j = 0; j < a; j++)
-                        storage[store_count][j] = buff[j];
-                    store_count++;
+                    for (int j = 0; j < store_count; j++)
+                    {
+                        if (strcmp(storage[j], buff) == 0)
+                        {
+                            flag = 1;
+                            break;
+                        }
+                    }
+                    if (flag)
+                        break;
+                    else
+                    {
+                        for (int j = 0; j < a; j++)
+                            storage[store_count][j] = buff[j];
+                        store_count++;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    int sorted_storage[500] = { 0 };
+    for (int i = 0; i < store_count; i++)
+    {
+        int min_count = 0;
+        for (int j = 0; j < store_count; j++)
+        {
+            if ((int)storage[i][0] <= (int)storage[j][0])
+                min_count++;
+        }
+
+        if (sorted_storage[store_count - min_count] == 0)
+            sorted_storage[store_count - min_count] = i;
+        else
+        {
+            for (int k = store_count - min_count; k < store_count; k++)
+            {
+                if (sorted_storage[k] == 0)
+                {
+                    sorted_storage[k] = i;
                     break;
                 }
             }
@@ -50,7 +89,7 @@ int get_lucky(char str[100], int length) {
 
     for (int i = 0; i < store_count; i++)
     {
-        cout << storage[i] << endl;
+        cout << storage[sorted_storage[i]] << endl;
     }
     return 0;
 }
