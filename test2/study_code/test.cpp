@@ -8,108 +8,77 @@
 
 using namespace std;
 
-int fibo[] = { 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89 };
-char storage[5000][100] = { "" };
-int sorted_storage[5000] = { 0 };
+int original_score[30000];
+int student_id[30000];
+char c_[5000] = { "" };
+int a_[5000] = { 0 };
+int b_[5000] = { 0 };
+int max_score_all[5000] = { 0 };
 
-int get_lucky(char str[100], int length) {
-    // write code here
+int get_max_score(int n, int m)
+{
+    int count = 0;
 
-    int store_count = 0;
-    for (int a = 1; a < length; a++)
+    for (int i = 0; i < m; i++)
     {
-        for (int i = 0; i < length - (a - 1); i++)
+        if (c_[i] == 'Q')
         {
-            int lex[26] = { 0 };
-            char buff[100] = { "" };
-            for (int j = i; j < i + a; j++)
+            if (a_[i] > b_[i])
             {
-                int index = int(str[j]) - 97;
-                if (lex[index] == 0)
-                    lex[index] = 1;
-                buff[j - i] = str[j];
-            }
-
-            int count = 0;
-            for (int k = 0; k < 26; k++)
-            {
-                if (lex[k] == 1)
-                    count++;
-            }
-
-            for (int k = 0; k < 12; k++)
-            {
-                int flag = 0;
-                if (count == fibo[k])
+                int max_score = 0;
+                for (int j = b_[i]; j <= a_[i]; j++)
                 {
-                    for (int j = 0; j < store_count; j++)
-                    {
-                        if (strcmp(storage[j], buff) == 0)
-                        {
-                            flag = 1;
-                            break;
-                        }
-                    }
-                    if (flag)
-                        break;
-                    else
-                    {
-                        for (int j = 0; j < a; j++)
-                            storage[store_count][j] = buff[j];
-                        store_count++;
-                        break;
-                    }
+                    if (original_score[j - 1] > max_score)
+                        max_score = original_score[j - 1];
                 }
+                max_score_all[count] = max_score;
+                count++;
             }
-        }
-    }
-
-    for (int i = 0; i < store_count; i++)
-    {
-        int min_count = 0;
-        for (int j = 0; j < store_count; j++)
-        {
-            if (strcmp(storage[i], storage[j]) <= 0)
-                min_count++;
-        }
-
-        if (sorted_storage[store_count - min_count] == 0)
-            sorted_storage[store_count - min_count] = i + 1;
-        else
-        {
-            for (int k = store_count - min_count; k < store_count; k++)
+            else
             {
-                if (sorted_storage[k] == 0)
+                int max_score = 0;
+                for (int j = a_[i]; j <= b_[i]; j++)
                 {
-                    sorted_storage[k] = i + 1;
-                    break;
+                    if (original_score[j - 1] > max_score)
+                        max_score = original_score[j - 1];
                 }
+                max_score_all[count] = max_score;
+                count++;
             }
+        }
+
+        if (c_[i] == 'U')
+        {
+            original_score[a_[i] - 1] = b_[i];
         }
     }
 
-    for (int i = 0; i < store_count; i++)
-    {
-        cout << storage[sorted_storage[i] - 1] << endl;
-    }
+    for (int i = 0; i < count; i++)
+        cout << max_score_all[i] << endl;
 
-    //cout << store_count << endl;
     return 0;
 }
 
 int main()
 {
-    char str[100] = { "" };
-    string s;
-    while (cin >> s)
+    int n, m;
+    while (cin >> n)
     {
-        //cout << str.size() << endl;
-        for (int i = 0; i < s.size(); i++)
+        cin >> m;
+        for (int i = 0; i < n; i++)
+            cin >> original_score[i];
+
+        for (int i = 0; i < m; i++)
         {
-            str[i] = s.at(i);
+            cin >> c_[i];
+            cin >> a_[i];
+            cin >> b_[i];
         }
-        int length = s.size();
-        get_lucky(str, length);
+
+        for (int i = 0; i < n; i++)
+            student_id[i] = i + 1;
+
+        get_max_score(n, m);
     }
 
     return 0;
