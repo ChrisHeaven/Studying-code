@@ -5,81 +5,113 @@
 #include <string.h>
 #include <math.h>
 #include <iomanip>
+#include <algorithm>
 
 using namespace std;
 
-int original_score[30000];
-int student_id[30000];
-char c_[5000] = { "" };
-int a_[5000] = { 0 };
-int b_[5000] = { 0 };
-int max_score_all[5000] = { 0 };
-
-int get_max_score(int n, int m)
+int output_log(vector<string> path_name, vector<string> line_num)
 {
+	char file_name[100][16] = { "" }, buff[16] = { "" };
+	int num_[100] = { 0 };
+	vector<string> line;
 	int count = 0;
 
-	for (int i = 0; i < m; i++)
+	for (int j = 0; j < path_name.size(); j++)
 	{
-		if (c_[i] == 'Q')
+		int index = 0;
+		for (int i = path_name[j].size() - 1; i > path_name[j].size() - 17; i--)
 		{
-			if (a_[i] > b_[i])
+			if (path_name[j][i] == '\\')
+				break;
+			buff[index] = path_name[j][i];
+			index++;
+		}
+
+		strrev(buff);
+
+		int flag = 0;
+		for (int i = 0; i < count; i++)
+		{
+			if (strcmp(file_name[i], buff) == 0 && line[i] == line_num[j])
 			{
-				int max_score = 0;
-				for (int j = b_[i]; j <= a_[i]; j++)
-				{
-					if (original_score[j - 1] > max_score)
-						max_score = original_score[j - 1];
-				}
-				max_score_all[count] = max_score;
-				count++;
-			}
-			else 
-			{
-				int max_score = 0;
-				for (int j = a_[i]; j <= b_[i]; j++)
-				{
-					if (original_score[j - 1] > max_score)
-						max_score = original_score[j - 1];
-				}
-				max_score_all[count] = max_score;
-				count++;
+				flag = 1;
+				num_[i]++;
+				break;
 			}
 		}
 
-		if (c_[i] == 'U')
+		if (flag == 0)
 		{
-			original_score[a_[i] - 1] = b_[i];
+			strcpy(file_name[count], buff);
+			line.push_back(line_num[j]);
+			num_[count] = 1;
+			count++;
 		}
 	}
 
-	for (int i = 0; i < count; i++)
-		cout << max_score_all[i] << endl;
+	if (count > 8)
+	{
+		for (int i = 0; i < 8; i++)
+		{
+			int max_index = 0;
+			for (int j = 0; j < count - 1; j++)
+			{
+				if (num_[j + 1] > num_[j])
+					max_index = j + 1;
+				else
+					max_index = j;
+			}
 
+			cout << file_name[max_index] << line[max_index] << " " << num_[max_index] << endl;
+			num_[max_index] = 0;
+		}
+	}
+	else 
+	{
+		for (int i = 0; i < count; i++)
+		{
+			int max_index = 0;
+			for (int j = 0; j < count - 1; j++)
+			{
+				if (num_[j + 1] > num_[j])
+					max_index = j + 1;
+				else
+					max_index = j;
+			}
+
+			cout << file_name[max_index] << " " << line[max_index] << " " << num_[max_index] << endl;
+			num_[max_index] = 0;
+		}
+	}
 	return 0;
 }
 
 int main()
 {
-	int n, m;
-	while (cin >> n)
+	vector<string> line_num;
+	string buff, buff_;
+	string buf;
+	vector<string>  path_name;
+	while (getline(cin, buff))
 	{
-		cin >> m;
-		for (int i = 0; i < n; i++)
-			cin >> original_score[i];
+		if (buff.size() == 0)
+			break;
+		int index = buff.find(' ');
 
-		for (int i = 0; i < m; i++)
-		{
-			cin >> c_[i];
-			cin >> a_[i];
-			cin >> b_[i];
-		}
+		for (int i = 0; i < index; i++)
+			buff_.push_back(buff[i]);
+		for (int i = index + 1; i < buff.size(); i++)
+			buf.push_back(buff[i]);
 
-		for (int i = 0; i < n; i++)
-			student_id[i] = i + 1;
-
-		get_max_score(n, m);
+		path_name.push_back(buff_);
+		//cin >> buf;
+		line_num.push_back(buf);
+		buf.clear();
+		buff_.clear();
 	}
+
+	output_log(path_name, line_num);
+	system("pause");
 
 	return 0;
 }
