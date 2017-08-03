@@ -9,109 +9,87 @@
 
 using namespace std;
 
-int output_log(vector<string> path_name, vector<string> line_num)
+int sorted_index[100000] = { 0 };
+
+long get_time(long n, long r, long avg, vector<long> a, vector<long> b)
 {
-	char file_name[100][16] = { "" }, buff[16] = { "" };
-	int num_[100] = { 0 };
-	vector<string> line;
-	int count = 0;
+	long sum = 0;
 
-	for (int j = 0; j < path_name.size(); j++)
+	for (int i = 0; i < n; i++)
+		sum = sum + a[i];
+
+	long remain = n * avg - sum;
+
+	for (int i = 0; i < b.size(); i++)
 	{
-		int index = 0;
-		for (int i = path_name[j].size() - 1; i > path_name[j].size() - 17; i--)
+		int count = 0;
+		for (int j = 0; j < b.size(); j++)
 		{
-			if (path_name[j][i] == '\\')
-				break;
-			buff[index] = path_name[j][i];
-			index++;
+			if (b[i] <= b[j])
+				count++;
 		}
-
-		strrev(buff);
-
-		int flag = 0;
-		for (int i = 0; i < count; i++)
+		if (sorted_index[b.size() - count] == 0)
+			sorted_index[b.size() - count] = i + 1;
+		else
 		{
-			if (strcmp(file_name[i], buff) == 0 && line[i] == line_num[j])
+			for (int j = b.size() - count; j < b.size(); j++)
 			{
-				flag = 1;
-				num_[i]++;
-				break;
+				if (sorted_index[j] == 0) 
+				{
+					sorted_index[j] = i + 1;
+					break;
+				}
 			}
-		}
-
-		if (flag == 0)
-		{
-			strcpy(file_name[count], buff);
-			line.push_back(line_num[j]);
-			num_[count] = 1;
-			count++;
 		}
 	}
 
-	if (count > 8)
+	long remain_sum = 0, index = 0;
+	for (int i = 0; i < a.size() - 1; i++)
 	{
-		for (int i = 0; i < 8; i++)
-		{
-			int max_index = 0;
-			for (int j = 0; j < count - 1; j++)
-			{
-				if (num_[j + 1] > num_[j])
-					max_index = j + 1;
-				else
-					max_index = j;
-			}
-
-			cout << file_name[max_index] << line[max_index] << " " << num_[max_index] << endl;
-			num_[max_index] = 0;
-		}
+		remain_sum = remain_sum + (r - a[sorted_index[i] - 1]);
+		index = i;
+		if (remain_sum + r - a[sorted_index[i + 1] - 1] > remain)
+			break;
 	}
-	else 
+
+	long time_cost = 0;
+
+	if (remain > 0) 
 	{
-		for (int i = 0; i < count; i++)
-		{
-			int max_index = 0;
-			for (int j = 0; j < count - 1; j++)
-			{
-				if (num_[j + 1] > num_[j])
-					max_index = j + 1;
-				else
-					max_index = j;
-			}
+		for (int i = 0; i <= index; i++)
+			time_cost = time_cost + (r - a[sorted_index[i] - 1]) * b[sorted_index[i] - 1];
 
-			cout << file_name[max_index] << " " << line[max_index] << " " << num_[max_index] << endl;
-			num_[max_index] = 0;
-		}
+		time_cost = time_cost + (remain - remain_sum) * b[sorted_index[index + 1] - 1];
 	}
-	return 0;
+
+	return time_cost;
 }
 
 int main()
 {
-	vector<string> line_num;
-	string buff, buff_;
-	string buf;
-	vector<string>  path_name;
-	while (getline(cin, buff))
-	{
-		if (buff.size() == 0)
-			break;
-		int index = buff.find(' ');
+	//long n, r, avg, buff;
+	//vector<long> a, b;
+	//while (cin >> n)
+	//{
+	//	cin >> r;
+	//	cin >> avg;
+	//	for (int i = 0; i < n; i++)
+	//	{
+	//		cin >> buff;
+	//		a.push_back(buff);
+	//		cin >> buff;
+	//		b.push_back(buff);
+	//	}
 
-		for (int i = 0; i < index; i++)
-			buff_.push_back(buff[i]);
-		for (int i = index + 1; i < buff.size(); i++)
-			buf.push_back(buff[i]);
+	//	long result = get_time(n, r, avg, a, b);
+	//	printf("%ld", result);
 
-		path_name.push_back(buff_);
-		//cin >> buf;
-		line_num.push_back(buf);
-		buf.clear();
-		buff_.clear();
-	}
+	//	a.clear();
+	//	b.clear();
+	//}
 
-	output_log(path_name, line_num);
-	system("pause");
+	long a = 72189518;
+	printf("%ld", a);
 
 	return 0;
 }
