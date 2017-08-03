@@ -42,7 +42,6 @@ int main()
 		}
 
 		cout << get_secret(p, n, x) << endl;
-		x.clear();
 	}
 
 	return 0;
