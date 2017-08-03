@@ -9,47 +9,39 @@
 
 using namespace std;
 
-char string_[20][1000000] = { "" };
-
-int get_secret(int t)
+int get_secret(int p, int n, vector<int> x)
 {
-    char secret[20] = { "" };
-    for (int i = 0; i < t; i++)
+    int full[300] = { 0 };
+    int index = -1;
+
+    for (int i = 0; i < n; i++)
     {
-        for (int j = 0; j < 1000000; j++)
+        if (full[x[i] % p] == 1)
         {
-            int flag = 0;
-            for (int k = 0; k < 1000000; k++)
-            {
-                if (string_[i][j] == string_[i][k] && j != k)
-                {
-                    flag = 1;
-                    break;
-                }
-            }
-            if (flag == 0)
-            {
-                secret[i] = string_[i][j];
-                break;
-            }
+            index = i + 1;
+            break;
         }
-        printf("%c\n", secret[i]);
+        full[x[i] % p] = 1;
     }
 
-    return 0;
+    return index;
 }
 
 int main()
 {
-    int t;
-    while (cin >> t)
+    int p = 0, n = 0, buff = 0;
+    while (cin >> p)
     {
-        for (int i = 0; i < t; i++)
+        vector<int> x;
+
+        cin >> n;
+        for (int i = 0; i < n; i++)
         {
-            scanf("%s", string_[i]);
+            cin >> buff;
+            x.push_back(buff);
         }
 
-        get_secret(t);
+        cout << get_secret(p, n, x) << endl;
     }
 
     return 0;
