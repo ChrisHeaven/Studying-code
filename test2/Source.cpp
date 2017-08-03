@@ -9,87 +9,82 @@
 
 using namespace std;
 
-int sorted_index[100000] = { 0 };
+class Coder {
+public:
+	vector<string> findCoder(vector<string> A, int n) {
+		// write code here
+		int num[300] = { 0 }, index[300] = { 0 };
+		vector<string> A_buff;
 
-long get_time(long n, long r, long avg, vector<long> a, vector<long> b)
-{
-	long sum = 0;
-
-	for (int i = 0; i < n; i++)
-		sum = sum + a[i];
-
-	long remain = n * avg - sum;
-
-	for (int i = 0; i < b.size(); i++)
-	{
-		int count = 0;
-		for (int j = 0; j < b.size(); j++)
+		for (int i = 0; i < n; i++)
 		{
-			if (b[i] <= b[j])
-				count++;
-		}
-		if (sorted_index[b.size() - count] == 0)
-			sorted_index[b.size() - count] = i + 1;
-		else
-		{
-			for (int j = b.size() - count; j < b.size(); j++)
+			A_buff.push_back(A[i]);
+			for (int j = 0; j < A[i].size(); j++)
 			{
-				if (sorted_index[j] == 0) 
-				{
-					sorted_index[j] = i + 1;
+				if (A[i][j] >= 'a' && A[i][j] <= 'z')
+					A[i][j] += ('A' - 'a');
+			}
+
+			int count = 0, pos = 0;
+			for (int j = 0; j < A[i].size(); j++)
+			{
+				if (A[i].find("CODER", pos) == -1)
 					break;
+				pos = A[i].find("CODER", pos) + 1;
+				count++;
+			}
+			num[i] = count;
+		}
+
+		for (int i = 0; i < 300; i++)
+		{
+			int num_count = 0;
+			for (int j = 0; j < 300; j++)
+			{
+				if (num[i] >= num[j])
+					num_count++;
+			}
+			if (index[300 - num_count] == 0)
+				index[300 - num_count] = i + 1;
+			else
+			{
+				for (int k = 300 - num_count; k < 300; k++)
+				{
+					if (index[k] == 0)
+					{
+						index[k] = i + 1;
+						break;
+					}
 				}
 			}
 		}
+
+		int zero_count = 0;
+		for (int i = 0; i < 300; i++)
+		{
+			if (num[i] > 0)
+				zero_count++;
+		}
+
+		vector<string> B;
+		for (int i = 0; i < zero_count; i++)
+			B.push_back(A_buff[index[i] - 1]);
+
+		return B;
 	}
-
-	long remain_sum = 0, index = 0;
-	for (int i = 0; i < a.size() - 1; i++)
-	{
-		remain_sum = remain_sum + (r - a[sorted_index[i] - 1]);
-		index = i;
-		if (remain_sum + r - a[sorted_index[i + 1] - 1] > remain)
-			break;
-	}
-
-	long time_cost = 0;
-
-	if (remain > 0) 
-	{
-		for (int i = 0; i <= index; i++)
-			time_cost = time_cost + (r - a[sorted_index[i] - 1]) * b[sorted_index[i] - 1];
-
-		time_cost = time_cost + (remain - remain_sum) * b[sorted_index[index + 1] - 1];
-	}
-
-	return time_cost;
-}
+};
 
 int main()
 {
-	//long n, r, avg, buff;
-	//vector<long> a, b;
-	//while (cin >> n)
-	//{
-	//	cin >> r;
-	//	cin >> avg;
-	//	for (int i = 0; i < n; i++)
-	//	{
-	//		cin >> buff;
-	//		a.push_back(buff);
-	//		cin >> buff;
-	//		b.push_back(buff);
-	//	}
+	vector<string> A = { "i am a coder", "Coder Coder", "Code" };
+	int n = 3;
+	Coder code;
+	vector<string> B = code.findCoder(A, n);
 
-	//	long result = get_time(n, r, avg, a, b);
-	//	printf("%ld", result);
+	for (int i = 0; i < B.size(); i++)
+		cout << B[i] << endl;
 
-	//	a.clear();
-	//	b.clear();
-	//}
-
-	long a = 72189518;
-	printf("%ld", a);
+	system("pause");
 
 	return 0;
 }
