@@ -9,39 +9,86 @@
 
 using namespace std;
 
-int get_secret(int p, int n, vector<int> x)
+float get_possi(int n, int m, int k, int map[20][20])
 {
-	int full[300] = { 0 };
-	int index = -1;
+	float route_num[20][20] = { 0.0 };
+	float possi = 0.0;
+
+	route_num[0][0] = 1;
+	if (map[0][1] > 0)
+		route_num[0][1] = 0;
+	else
+		route_num[0][1] = 0.5;
+	if (map[1][0] > 0)
+		route_num[1][0] = 0;
+	else
+		route_num[1][0] = 0.5;
 
 	for (int i = 0; i < n; i++)
 	{
-		if (full[x[i] % p] == 1)
+		for (int j = 0; j < m; j++)
 		{
-			index = i + 1;
-			break;
+			if (j == 0 && i > 1)
+			{
+				if (map[i][j] == 0)
+					route_num[i][j] = route_num[i - 1][j] / 2.0;
+			}
+			if (i == 0 && j > 1)
+			{
+				if (map[i][j] == 0)
+					route_num[i][j] = route_num[i][j - 1] / 2.0;
+			}
+			if (j != 0 && i != 0 && j != m - 1 && i != n - 1)
+			{
+				if (map[i][j] == 0)
+					route_num[i][j] = route_num[i][j - 1] / 2.0 + route_num[i - 1][j] / 2.0;
+			}
+
+			if (j == m - 1 && i > 0 && i != n - 1)
+			{
+				if (map[i][j] == 0)
+					route_num[i][j] = route_num[i][j - 1] / 2.0 + route_num[i - 1][j];
+			}
+
+			if (i == n - 1 && j > 0 && j != m - 1)
+			{
+				if (map[i][j] == 0)
+					route_num[i][j] = route_num[i][j - 1] + route_num[i - 1][j] / 2.0;
+			}
+
+			if (i == n - 1 && j == m - 1)
+			{
+				if (map[i][j] == 0)
+					route_num[i][j] = route_num[i][j - 1] + route_num[i - 1][j];
+			}
 		}
-		full[x[i] % p] = 1;
 	}
 
-	return index;
+	possi = route_num[n - 1][m - 1];
+
+	if (map[0][0] > 0)
+		possi = 0.0;
+
+	return possi;
 }
 
 int main()
 {
-	int p = 0, n = 0, buff = 0;
-	while (cin >> p)
+	int n = 0, m = 0, k = 0;
+	while (cin >> n)
 	{
-		vector<int> x;
+		cin >> m >> k;
+		int map[20][20] = { 0 };
+		int row = 0;
+		int col = 0;
 
-		cin >> n;
-		for (int i = 0; i < n; i++)
+		for (int i = 0; i < k; i++)
 		{
-			cin >> buff;
-			x.push_back(buff);
+			cin >> row >> col;
+			map[row - 1][col - 1]++;
 		}
 
-		cout << get_secret(p, n, x) << endl;
+		cout << fixed << setprecision(2) << get_possi(n, m, k, map) << endl;
 	}
 
 	return 0;
