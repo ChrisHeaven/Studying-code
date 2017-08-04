@@ -11,20 +11,23 @@ using namespace std;
 
 int main()
 {
-    int n = 0;
-    while (cin >> n)
+    string s1, s2;
+    int len1, len2;
+    while (cin >> s1 >> s2 >> len1 >> len2)
     {
-        int index = 0;
-        for (int i = 0; i <= 10; i++)
+        int sum = 0;
+        for (int len = len1; len <= len2; len++)
         {
-            if (pow(2, i) > n + 1)
-            {
-                index = i;
-                break;
-            }
+            int sum_1 = 0, sum_2 = 0;
+            for (int i = 0; i < len; i++)
+                sum_1 = sum_1 + pow(26, len - i - 1) * (s1[i] - 'a');
+
+            for (int i = 0; i < len; i++)
+                sum_2 = sum_2 + pow(26, len - i - 1) * (s2[i] - 'a');
+            sum = (sum + (sum_2 - sum_1)) % 1000007;
         }
 
-        cout << pow(2, index - 1) - 1 << endl;
+        cout << sum - 1 << endl;
     }
 
     return 0;
