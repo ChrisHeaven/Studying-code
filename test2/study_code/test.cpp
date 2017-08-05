@@ -9,25 +9,75 @@
 
 using namespace std;
 
+int knew[100000] = { 0 }, be_knew[100000] = { 0 };
+int index[20][100000] = { 0 };
+int num[20] = {0};
+
+int get_canddi(int n, int m, vector<int> s_1, vector<int> s_2, int t)
+{
+
+    for (int i = 0; i < m; i++)
+    {
+        if (s_1[i] != s_2[i])
+        {
+            knew[s_1[i]]++;
+            be_knew[s_2[i]]++;
+        }
+    }
+
+    int count = 0;
+    for (int i = 1; i <= n; i++)
+    {
+        if (knew[i] == 0 && be_knew[i] == n - 1)
+        {
+            index[t][count] = i;
+            count++;
+        }
+    }
+    num[t] = count;
+
+    return 0;
+}
+
 int main()
 {
-    string s1, s2;
-    int len1, len2;
-    while (cin >> s1 >> s2 >> len1 >> len2)
-    {
-        int sum = 0;
-        for (int len = len1; len <= len2; len++)
-        {
-            int sum_1 = 0, sum_2 = 0;
-            for (int i = 0; i < len; i++)
-                sum_1 = sum_1 + pow(26, len - i - 1) * (s1[i] - 'a');
+    int t, n, m, buff;
 
-            for (int i = 0; i < len; i++)
-                sum_2 = sum_2 + pow(26, len - i - 1) * (s2[i] - 'a');
-            sum = (sum + (sum_2 - sum_1)) % 1000007;
+    while (cin >> t)
+    {
+        for (int i = 0; i < t; i++)
+        {
+            vector<int> s_1, s_2;
+
+            cin >> n >> m;
+            for (int j = 0; j < m; j++)
+            {
+                cin >> buff;
+                s_1.push_back(buff);
+                cin >> buff;
+                s_2.push_back(buff);
+            }
+
+            get_canddi(n, m, s_1, s_2, i);
         }
 
-        cout << sum - 1 << endl;
+        for (int i = 0; i < t; i++)
+        {
+            if (num[i] != 0)
+            {
+                cout << num[i] << endl;;
+                for (int j = 0; j < num[i]; j++)
+                {
+                    cout << index[i][j] << " ";
+                }
+                cout << " " << endl;
+            }
+            else
+            {
+                cout << num[i] << endl;
+                cout << " " << endl;
+            }
+        }
     }
 
     return 0;
