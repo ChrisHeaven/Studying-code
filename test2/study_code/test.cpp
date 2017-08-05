@@ -82,7 +82,7 @@ int get_result(int n, string score)
     for (int i = 0; i < iter; i++)
         sum = sum + ((total_up[i] + 1) + 2) * total_up[i] / 2 + (total_down[i] + 1) * total_down[i] / 2;
 
-    return sum + 1;
+    return sum;
 }
 
 int main()
