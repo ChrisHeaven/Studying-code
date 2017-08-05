@@ -9,52 +9,95 @@
 
 using namespace std;
 
-string abc = "345678910JQKA2jokerJOKER";
-
-int get_result(string poker)
+int get_result(int n, string score)
 {
-    int index = poker.find('-');
-    string poker_1, poker_2;
+    int up = 0, down = 0;
+    int total_up[100] = { 0 }, total_down[100] = { 0 };
+    int count_up = 0;
+    int count_down = 0;
 
-    poker_1 = poker.substr(0, index);
-    poker_2 = poker.substr(index + 1);
-
-    if (poker_1.size() == 11 || poker_2.size() == 11)
-        cout << "joker JOKER" << endl;
-    else if (poker_1.size() == 7 || poker_2.size() == 7)
+    for (int i = 1; i < n; i++)
     {
-        if (poker_2.size() != 7)
-            cout << poker_1 << endl;
-        else if (poker_1.size() != 7)
-            cout << poker_2 << endl;
-        else if (poker_1.size() == 7 && poker_2.size() == 7)
+        if (score[i] > score[i - 1])
         {
-            if (abc.find(poker_1[0]) > abc.find(poker_2[0]))
-                cout << poker_1 << endl;
-            else
-                cout << poker_2 << endl;
+            up++;
+            if (i == n - 1)
+            {
+                if (up > 0)
+                {
+                    total_up[count_up] = up;
+                    count_up++;
+                }
+                up = 0;
+            }
+        }
+        else
+        {
+            if (up > 0)
+            {
+                total_up[count_up] = up;
+                count_up++;
+            }
+            up = 0;
+        }
+
+        if (score[i] < score[i - 1])
+        {
+            down++;
+            if (i == n - 1)
+            {
+                if (down > 0)
+                {
+                    total_down[count_down] = down;
+                    count_down++;
+                }
+                down = 0;
+            }
+        }
+        else
+        {
+            if (down > 0)
+            {
+                total_down[count_down] = down;
+                count_down++;
+            }
+            down = 0;
         }
     }
-    else if (count(poker_1.begin(), poker_1.end(), ' ') == count(poker_2.begin(), poker_2.end(), ' '))
-    {
-        if (abc.find(poker_1[0]) > abc.find(poker_2[0]))
-            cout << poker_1 << endl;
-        else
-            cout << poker_2 << endl;
-    }
-    else
-        cout << "ERROR" << endl;
 
-    return 0;
+    int iter = 0, sum = 0;
+    if (count_up > count_down)
+    {
+        iter = count_down;
+        sum = (total_up[count_up - 1] + 1) * total_up[count_up - 1] / 2;
+    }
+    else if (count_up < count_down)
+    {
+        iter = count_up;
+        sum = (total_down[count_down - 1] + 1) * total_down[count_down - 1] / 2;
+    }
+    else if (count_up == count_down)
+        iter = count_up;
+
+    for (int i = 0; i < iter; i++)
+        sum = sum + ((total_up[i] + 1) + 2) * total_up[i] / 2 + (total_down[i] + 1) * total_down[i] / 2;
+
+    return sum + 1;
 }
 
 int main()
 {
-    string poker;
+    int n = 0, buff = 0;
+    string score;
 
-    while (getline(cin, poker))
+    while (cin >> n)
     {
-        get_result(poker);
+        for (int i = 0; i < n; i++)
+        {
+            cin >> buff;
+            score.push_back(buff);
+        }
+        cout << get_result(n, score) << endl;
     }
 
     return 0;
