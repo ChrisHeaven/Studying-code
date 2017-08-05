@@ -9,79 +9,53 @@
 
 using namespace std;
 
-int index_[20][100000] = { 0 };
-int num[20] = { 0 };
+string abc = "345678910JQKA2jokerJOKER";
 
-int get_canddi(int n, int m, vector<int> s_1, vector<int> s_2, int t)
+int get_result(string poker)
 {
-	vector<int> knew, be_knew;
+    int index = poker.find('-');
+    string poker_1, poker_2;
 
-	for (int i = 0; i <= n; i++)
-	{
-		knew.push_back(0);
-		be_knew.push_back(0);
-	}
+    poker_1 = poker.substr(0, index);
+    poker_2 = poker.substr(index + 1);
 
-	for (int i = 0; i < m; i++)
-	{
-		if (s_1[i] != s_2[i])
-		{
-			knew[s_1[i]]++;
-			be_knew[s_2[i]]++;
-		}
-	}
+    if (poker_1.size() == 11 || poker_2.size() == 11)
+        cout << "joker JOKER" << endl;
+    else if (poker_1.size() == 7 || poker_2.size() == 7)
+    {
+        if (poker_2.size() != 7)
+            cout << poker_1 << endl;
+        else if (poker_1.size() != 7)
+            cout << poker_2 << endl;
+        else if (poker_1.size() == 7 && poker_2.size() == 7)
+        {
+            if (abc.find(poker_1[0]) > abc.find(poker_2[0]))
+                cout << poker_1 << endl;
+            else
+                cout << poker_2 << endl;
+        }
+    }
+    else if (count(poker_1.begin(), poker_1.end(), ' ') == count(poker_2.begin(), poker_2.end(), ' '))
+    {
+        if (abc.find(poker_1[0]) > abc.find(poker_2[0]))
+            cout << poker_1 << endl;
+        else
+            cout << poker_2 << endl;
+    }
+    else
+        cout << "ERROR" << endl;
 
-	int count = 0;
-	for (int i = 1; i <= n; i++)
-	{
-		if (knew[i] == 0 && be_knew[i] == n - 1)
-		{
-			index_[t][count] = i;
-			count++;
-		}
-	}
-	num[t] = count;
-
-	return 0;
+    return 0;
 }
 
 int main()
 {
-	int t, n, m, buff;
+    string poker;
 
-	while (cin >> t)
-	{
-		for (int i = 0; i < t; i++)
-		{
-			vector<int> s_1, s_2;
+    while (getline(cin, poker))
+    {
+        get_result(poker);
+    }
 
-			cin >> n >> m;
-			for (int j = 0; j < m; j++)
-			{
-				cin >> buff;
-				s_1.push_back(buff);
-				cin >> buff;
-				s_2.push_back(buff);
-			}
-
-			get_canddi(n, m, s_1, s_2, i);
-		}
-
-		for (int i = 0; i < t; i++)
-		{
-			if (num[i] != 0)
-			{
-				cout << num[i] << endl;;
-				for (int j = 0; j < num[i]; j++)
-					cout << index_[i][j] << endl;
-			}
-			else
-			{
-				cout << num[i] << endl;
-				cout << endl;
-			}
-		}
-	}
-
-	return 0;
+    return 0;
 }
