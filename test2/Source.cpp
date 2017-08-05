@@ -9,12 +9,18 @@
 
 using namespace std;
 
-int knew[100000] = { 0 }, be_knew[100000] = { 0 };
-int index[20][100000] = { 0 };
+int index_[20][100000] = { 0 };
 int num[20] = { 0 };
 
 int get_canddi(int n, int m, vector<int> s_1, vector<int> s_2, int t)
 {
+	vector<int> knew, be_knew;
+
+	for (int i = 0; i <= n; i++)
+	{
+		knew.push_back(0);
+		be_knew.push_back(0);
+	}
 
 	for (int i = 0; i < m; i++)
 	{
@@ -30,7 +36,7 @@ int get_canddi(int n, int m, vector<int> s_1, vector<int> s_2, int t)
 	{
 		if (knew[i] == 0 && be_knew[i] == n - 1)
 		{
-			index[t][count] = i;
+			index_[t][count] = i;
 			count++;
 		}
 	}
@@ -67,15 +73,12 @@ int main()
 			{
 				cout << num[i] << endl;;
 				for (int j = 0; j < num[i]; j++)
-				{
-					cout << index[i][j] << " ";
-				}
-				cout << " " << endl;
+					cout << index_[i][j] << endl;
 			}
 			else
 			{
 				cout << num[i] << endl;
-				cout << " " << endl;
+				cout << endl;
 			}
 		}
 	}
