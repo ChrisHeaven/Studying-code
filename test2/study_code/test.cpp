@@ -9,95 +9,127 @@
 
 using namespace std;
 
-int get_result(int n, string score)
+int get_tier(int n, string id, string weight, string height)
 {
-    int up = 0, down = 0;
-    int total_up[100] = { 0 }, total_down[100] = { 0 };
-    int count_up = 0;
-    int count_down = 0;
+    // string weight_index, height_index;
+    // int max_weight = 0, max_height = 0, index = 0;
 
-    for (int i = 1; i < n; i++)
+    // for (int i = 0; i < n; i++)
+    // {
+    //     int weight_count = 0, height_count = 0;
+    //     for (int j = 0; j < n; j++)
+    //     {
+    //         if (weight[i] >= weight[j])
+    //             weight_count++;
+    //         if (height[i] >= height[j])
+    //             height_count++;
+    //     }
+    //     weight_index.push_back(weight_count);
+    //     height_index.push_back(height_count);
+
+    //     if (weight_index[i] + height_index[i] >= max_weight + max_height)
+    //     {
+    //         if (weight_index[i] + height_index[i] == max_weight + max_height)
+    //         {
+    //             if (weight_index[i] * height_index[i] >= max_weight * max_height)
+    //             {
+    //                 max_weight = weight_index[i];
+    //                 max_height = height_index[i];
+    //                 index = i;
+    //             }
+    //         }
+    //         else if (weight_index[i] + height_index[i] > max_weight + max_height)
+    //         {
+    //             max_weight = weight_index[i];
+    //             max_height = height_index[i];
+    //             index = i;
+    //         }
+    //     }
+    // }
+    string sorted_weight, sorted_height;
+    for (int i = 0; i < n; i++)
     {
-        if (score[i] > score[i - 1])
+        sorted_weight.push_back(-1);
+        sorted_height.push_back(0);
+    }
+
+    for (int i = 0; i < n; i++)
+    {
+        int count = 0;
+        for (int j = 0; j < n; j++)
         {
-            up++;
-            if (i == n - 1)
+            if (weight[i] < weight[j])
+                count++;
+            else if (weight[i] == weight[j])
             {
-                if (up > 0)
-                {
-                    total_up[count_up] = up;
-                    count_up++;
-                }
-                up = 0;
+                if (height[i] >= height[j])
+                    count++;
             }
+        }
+        if (sorted_weight[n - count] == 0)
+        {
+            sorted_weight[n - count] = weight[i];
+            sorted_height[n - count] = height[i];
         }
         else
         {
-            if (up > 0)
+            for (int j = n - count; j < n; j++)
             {
-                total_up[count_up] = up;
-                count_up++;
-            }
-            up = 0;
-        }
-
-        if (score[i] < score[i - 1])
-        {
-            down++;
-            if (i == n - 1)
-            {
-                if (down > 0)
+                if (sorted_weight[j] == 0)
                 {
-                    total_down[count_down] = down;
-                    count_down++;
+                    sorted_weight[j] = weight[i];
+                    sorted_height[j] = height[i];
+                    break;
                 }
-                down = 0;
             }
         }
-        else
+    }
+
+    int max_tier = 0;
+    for (int index = 0; index < n - 1; index++)
+    {
+        int tier = 0;
+        int cur_index = index;
+        for (int i = index; i < n - 1; i++)
         {
-            if (down > 0)
+            if (sorted_height[i + 1] >= sorted_height[cur_index])
             {
-                total_down[count_down] = down;
-                count_down++;
+                if (sorted_height[i + 1] > sorted_height[cur_index])
+                {
+                    tier++;
+                    cur_index = i + 1;
+                }
+                else if (sorted_height[i + 1] == sorted_height[cur_index] && sorted_weight[cur_index] == sorted_weight[i + 1])
+                {
+                    tier++;
+                    cur_index = i + 1;
+                }
             }
-            down = 0;
         }
+        if (tier >= max_tier)
+            max_tier = tier;
     }
 
-    int iter = 0, sum = 0;
-    if (count_up > count_down)
-    {
-        iter = count_down;
-        sum = (total_up[count_up - 1] + 1) * total_up[count_up - 1] / 2;
-    }
-    else if (count_up < count_down)
-    {
-        iter = count_up;
-        sum = (total_down[count_down - 1] + 1) * total_down[count_down - 1] / 2;
-    }
-    else if (count_up == count_down)
-        iter = count_up;
-
-    for (int i = 0; i < iter; i++)
-        sum = sum + ((total_up[i] + 1) + 2) * total_up[i] / 2 + (total_down[i] + 1) * total_down[i] / 2;
-
-    return sum;
+    return max_tier + 1;
 }
 
 int main()
 {
-    int n = 0, buff = 0;
-    string score;
-
+    int n, buff;
+    string id, weight, height;
     while (cin >> n)
     {
         for (int i = 0; i < n; i++)
         {
             cin >> buff;
-            score.push_back(buff);
+            id.push_back(buff);
+            cin >> buff;
+            weight.push_back(buff);
+            cin >> buff;
+            height.push_back(buff);
         }
-        cout << get_result(n, score) << endl;
+
+        cout << get_tier(n, id, weight, height) << endl;
     }
 
     return 0;
