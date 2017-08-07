@@ -9,93 +9,50 @@
 
 using namespace std;
 
-int get_tier(int n, string id, string weight, string height)
+//int count_ = 0;
+char result[9] = { 0 };
+
+int get_result(string password, int char_size)
 {
-	string sorted_weight, sorted_height;
-
-	for (int i = 0; i < n; i++)
+	int remain = 0;
+	for (int i = 0; i < password.size(); i++)
 	{
-		sorted_weight.push_back(-1);
-		sorted_height.push_back(0);
-	}
-
-	for (int i = 0; i < n; i++)
-	{
-		int count = 0;
-		for (int j = 0; j < n; j++)
+		result[char_size - password.size()] = password[i];
+		//count_++;
+		string buff;
+		for (int j = 0; j < password.size(); j++)
 		{
-			if (weight[i] < weight[j])
-				count++;
-			else if (weight[i] == weight[j])
+			if (j != i)
 			{
-				if (height[i] >= height[j])
-					count++;
+				buff.push_back(password[j]);
 			}
 		}
-		if (sorted_weight[n - count] == -1)
-		{
-			sorted_weight[n - count] = weight[i];
-			sorted_height[n - count] = height[i];
-		}
-		else
-		{
-			for (int j = n - count; j < n; j++)
-			{
-				if (sorted_weight[j] == -1)
-				{
-					sorted_weight[j] = weight[i];
-					sorted_height[j] = height[i];
-					break;
-				}
-			}
-		}
+		remain = buff.size();
+		if (remain == 0)
+			break;
+		get_result(buff, char_size);
 	}
-
-	int max_tier = 0;
-	for (int index = 0; index < n - 1; index++)
+	if (remain == 0)
 	{
-		int tier = 0;
-		int cur_index = index;
-		for (int i = index; i < n - 1; i++)
+		for (int i = 0; i < char_size; i++)
 		{
-			if (sorted_height[i + 1] >= sorted_height[cur_index])
-			{
-				if (sorted_height[i + 1] > sorted_height[cur_index])
-				{
-					tier++;
-					cur_index = i + 1;
-				}
-				else if (sorted_height[i + 1] == sorted_height[cur_index] && sorted_weight[cur_index] <= sorted_weight[i + 1])
-				{
-					tier++;
-					cur_index = i + 1;
-				}
-			}
+			cout << result[i];
 		}
-		if (tier >= max_tier)
-			max_tier = tier;
+		cout << endl;
+		//count_-= 2;
 	}
 
-	return max_tier + 1;
+	return 0;
+
 }
 
 int main()
 {
-	int n, buff;
-	string id, weight, height;
-	while (cin >> n)
-	{
-		for (int i = 0; i < n; i++)
-		{
-			cin >> buff;
-			id.push_back(buff);
-			cin >> buff;
-			weight.push_back(buff);
-			cin >> buff;
-			height.push_back(buff);
-		}
+	string password;
 
-		cout << get_tier(n, id, weight, height) << endl;
+	while (getline(cin, password))
+	{
+		get_result(password, password.size());
 	}
 
 	return 0;
