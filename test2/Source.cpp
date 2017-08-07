@@ -9,8 +9,8 @@
 
 using namespace std;
 
-//int count_ = 0;
 char result[9] = { 0 };
+vector<string> result_set;
 
 int get_result(string password, int char_size)
 {
@@ -18,14 +18,11 @@ int get_result(string password, int char_size)
 	for (int i = 0; i < password.size(); i++)
 	{
 		result[char_size - password.size()] = password[i];
-		//count_++;
 		string buff;
 		for (int j = 0; j < password.size(); j++)
 		{
 			if (j != i)
-			{
 				buff.push_back(password[j]);
-			}
 		}
 		remain = buff.size();
 		if (remain == 0)
@@ -34,12 +31,10 @@ int get_result(string password, int char_size)
 	}
 	if (remain == 0)
 	{
+		string buf;
 		for (int i = 0; i < char_size; i++)
-		{
-			cout << result[i];
-		}
-		cout << endl;
-		//count_-= 2;
+			buf.push_back(result[i]);
+		result_set.push_back(buf);
 	}
 
 	return 0;
@@ -53,6 +48,26 @@ int main()
 	while (getline(cin, password))
 	{
 		get_result(password, password.size());
+
+		//vector<string> final_set;
+		//for (int i = 0; i < result_set.size(); i++)
+		//	final_set.push_back(" ");
+
+		//for (int i = 0; i < result_set.size(); i++)
+		//{
+		//	int count = 0;
+		//	for (int j = 0; j < result_set.size(); j++)
+		//	{
+		//		if (strcmp(result_set[i].c_str(), result_set[j].c_str()) <= 0)
+		//			count++;
+		//	}
+		//	final_set[result_set.size() - count] = result_set[i];
+		//}
+		sort(result_set.begin(), result_set.end());
+		for (int i = 0; i < result_set.size(); i++)
+			cout << result_set[i] << endl;
+
+		result_set.clear();
 	}
 
 	return 0;
