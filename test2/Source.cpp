@@ -9,61 +9,71 @@
 
 using namespace std;
 
-/* P为模式串，下标从0开始 */
-void GetNext(string P, int next[])
+//array是待调整的堆数组，i是待调整的数组元素的位置，nlength是数组的长度
+//本函数功能是：根据数组array构建大根堆
+void HeapAdjust(int array[], int child_node, int nLength)
 {
-	int p_len = P.size();
-	int i = 0;   //P的下标
-	int j = -1;
-	next[0] = -1;
+	int father_node = (child_node - 1) / 2;
 
-	while (i < p_len)
+	int temp = 0;
+	if (array[child_node] > array[father_node])
 	{
-		if (j == -1 || P[i] == P[j])
-		{
-			i++;
-			j++;
-			next[i] = j;
-		}
-		else
-			j = next[j];
+		temp = array[father_node];
+		array[father_node] = array[child_node];
+		array[child_node] = temp;
 	}
 }
-
-/* 在S中找到P第一次出现的位置 */
-int KMP(string S, string P, int next[])
+//堆排序算法
+void HeapSort(int array[], int length)
 {
-	GetNext(P, next);
+	int i;
 
-	int i = 0;  //S的下标
-	int j = 0;  //P的下标
-	int s_len = S.size();
-	int p_len = P.size();
-
-	while (i < s_len && j < p_len)
+	for (i = length; i > 0; i--)
+		HeapAdjust(array, i, length);
+	//从最后一个元素开始对序列进行调整，不断的缩小调整的范围直到第一个元素
+	cout << array[0] << endl;
+	int temp = 0;
+	for (i = length - 1; i > 0; --i)
 	{
-		if (j == -1 || S[i] == P[j])  //P的第一个字符不匹配或S[i] == P[j]
-		{
-			i++;
-			j++;
-		}
+		//把第一个元素和当前的最后一个元素交换，
+		//保证当前的最后一个位置的元素都是在现在的这个序列之中最大的
+		temp = array[0];
+		array[0] = array[i];
+		array[i] = temp;
+		//不断缩小调整heap的范围，每一次调整完毕保证第一个元素是当前序列的最大值
+		if (array[2] > array[1])
+			HeapAdjust(array, 2, length);
 		else
-			j = next[j];  //当前字符匹配失败，进行跳转
+			HeapAdjust(array, 1, length);
+
+		cout << array[0] << endl;
 	}
-
-	if (j == p_len)  //匹配成功
-		return i - j;
-
-	return -1;
 }
-
 int main()
 {
-	int next[100] = { 0 };
+	int i;
+	int num[] = { 9, 8, 7, 6, 5, 4, 3, 2, 1, 0 };
+	HeapSort(num, sizeof(num) / sizeof(int));
+	for (i = 0; i < sizeof(num) / sizeof(int); i++)
+		printf("%d ", num[i]);
+	//for (int i = sizeof(num) / sizeof(int) - 1; i >= 0; i--)
+	//{
+	//	for (int j = sizeof(num) / sizeof(int) - 1; j > 0; j--)
+	//	{
+	//		int father_node = (j - 1) / 2;
 
-	cout << KMP("bbc abcdab abcdabcdabde", "abcdabd", next) << endl; //15
+	//		int temp = 0;
+	//		if (num[j] > num[father_node])
+	//		{
+	//			temp = num[father_node];
+	//			num[father_node] = num[j];
+	//			num[j] = temp;
+	//		}
+	//	}
+	//	cout << num[0] << endl;
+	//	num[0] = -1;
+	//}
 
 	system("pause");
-
 	return 0;
 }
