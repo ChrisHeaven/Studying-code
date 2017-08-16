@@ -9,66 +9,61 @@
 
 using namespace std;
 
-char result[9] = { 0 };
-vector<string> result_set;
-
-int get_result(string password, int char_size)
+/* P为模式串，下标从0开始 */
+void GetNext(string P, int next[])
 {
-	int remain = 0;
-	for (int i = 0; i < password.size(); i++)
+	int p_len = P.size();
+	int i = 0;   //P的下标
+	int j = -1;
+	next[0] = -1;
+
+	while (i < p_len)
 	{
-		result[char_size - password.size()] = password[i];
-		string buff;
-		for (int j = 0; j < password.size(); j++)
+		if (j == -1 || P[i] == P[j])
 		{
-			if (j != i)
-				buff.push_back(password[j]);
+			i++;
+			j++;
+			next[i] = j;
 		}
-		remain = buff.size();
-		if (remain == 0)
-			break;
-		get_result(buff, char_size);
+		else
+			j = next[j];
 	}
-	if (remain == 0)
+}
+
+/* 在S中找到P第一次出现的位置 */
+int KMP(string S, string P, int next[])
+{
+	GetNext(P, next);
+
+	int i = 0;  //S的下标
+	int j = 0;  //P的下标
+	int s_len = S.size();
+	int p_len = P.size();
+
+	while (i < s_len && j < p_len)
 	{
-		string buf;
-		for (int i = 0; i < char_size; i++)
-			buf.push_back(result[i]);
-		result_set.push_back(buf);
+		if (j == -1 || S[i] == P[j])  //P的第一个字符不匹配或S[i] == P[j]
+		{
+			i++;
+			j++;
+		}
+		else
+			j = next[j];  //当前字符匹配失败，进行跳转
 	}
 
-	return 0;
+	if (j == p_len)  //匹配成功
+		return i - j;
 
+	return -1;
 }
 
 int main()
 {
-	string password;
+	int next[100] = { 0 };
 
-	while (getline(cin, password))
-	{
-		get_result(password, password.size());
+	cout << KMP("bbc abcdab abcdabcdabde", "abcdabd", next) << endl; //15
 
-		//vector<string> final_set;
-		//for (int i = 0; i < result_set.size(); i++)
-		//	final_set.push_back(" ");
-
-		//for (int i = 0; i < result_set.size(); i++)
-		//{
-		//	int count = 0;
-		//	for (int j = 0; j < result_set.size(); j++)
-		//	{
-		//		if (strcmp(result_set[i].c_str(), result_set[j].c_str()) <= 0)
-		//			count++;
-		//	}
-		//	final_set[result_set.size() - count] = result_set[i];
-		//}
-		sort(result_set.begin(), result_set.end());
-		for (int i = 0; i < result_set.size(); i++)
-			cout << result_set[i] << endl;
-
-		result_set.clear();
-	}
+	system("pause");
 
 	return 0;
 }

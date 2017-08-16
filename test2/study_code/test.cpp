@@ -9,63 +9,55 @@
 
 using namespace std;
 
-char result[9] = { 0 };
-vector<string> result_set;
-
-int get_result(string password, int char_size)
+int q_sort(int n, int a[10], int low, int high)
 {
-    int remain = 0;
-    for (int i = 0; i < password.size(); i++)
+    if (low >= high)
+        return 0;
+
+    int begin = low;
+    int end = high;
+    int key = a[low];
+
+    while (begin < end)
     {
-        result[char_size - password.size()] = password[i];
-        string buff;
-        for (int j = 0; j < password.size(); j++)
+        for (; end > begin; end--)
         {
-            if (j != i)
-                buff.push_back(password[j]);
+            if (a[end] <= key)
+            {
+                a[low] = a[end];
+                break;
+            }
         }
-        remain = buff.size();
-        if (remain == 0)
-            break;
-        get_result(buff, char_size);
-    }
-    if (remain == 0)
-    {
-        string buf;
-        for (int i = 0; i < char_size; i++)
-            buf.push_back(result[i]);
-        result_set.push_back(buf);
+        //high = end;
+
+        for (; begin < end; begin++)
+        {
+            if (a[begin] >= key)
+            {
+                a[end] = a[begin];
+                break;
+            }
+        }
+        //low = begin;
     }
 
-    return 0;
+    a[begin] = key;
 
+    q_sort(n, a, 0, begin - 1);
+    q_sort(n, a, begin + 1, high);
 }
 
 int main()
 {
-    string password;
+    int n, a[10] = {0};
+    string str;
 
-    while (getline(cin, password))
+    while (cin >> n)
     {
-        get_result(password, password.size());
+        for (int i = 0; i < n; i++)
+            cin >> a[i];
 
-        vector<string> final_set;
-        for (int i = 0; i < result_set.size(); i++)
-            final_set.push_back(" ");
-
-        for (int i = 0; i < result_set.size(); i++)
-        {
-            int count = 0;
-            for (int j = 0; j < result_set.size(); j++)
-            {
-                if (strcmp(result_set[i].c_str(), result_set[j].c_str()) <= 0)
-                    count++;
-            }
-            final_set[result_set.size() - count] = result_set[i];
-        }
-
-        for (int i = 0; i < result_set.size(); i++)
-            cout << final_set[i] << endl;
+        cout << q_sort(n, a, 0, n - 1) << endl;
     }
 
     return 0;
