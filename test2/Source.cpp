@@ -9,40 +9,23 @@
 
 using namespace std;
 
-int q_sort(int a[], int low, int high)
+int bubble_sort(int a[], int n)
 {
-	int head = low;
-	int tail = high;
-	int key_value = a[low];
-
-	if (head >= tail)
-		return 0;
-
-	while (head < tail)
+	for (int i = n; i >= 0; i--)
 	{
-		for (; head < tail; tail--)
+		int temp = 0;
+		for (int j = 0; j < i; j++)
 		{
-			if (a[tail] < key_value)
+			if (a[j + 1] < a[j])
 			{
-				a[head] = a[tail];
-				break;
-			}
-		}
-
-		for (; head < tail; head++)
-		{
-			if (a[head] > key_value)
-			{
-				a[tail] = a[head];
-				break;
+				temp = a[j];
+				a[j] = a[j + 1];
+				a[j + 1] = temp;
 			}
 		}
 	}
 
-	a[head] = key_value;
-
-	q_sort(a, 0, head - 1);
-	q_sort(a, head + 1, high);
+	return 0;
 }
 
 int main()
@@ -52,7 +35,7 @@ int main()
 	int a[] = { 339, 833, 73, 236, 653, 34, 23, 2422, 11314, 1110 };
 	n = sizeof(a) / sizeof(int);
 
-	q_sort(a, 0, n - 1);
+	bubble_sort(a, n - 1);
 
 	for (int i = 0; i < n; i++)
 		cout << a[i] << " ";
