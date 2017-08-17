@@ -9,55 +9,56 @@
 
 using namespace std;
 
-void HeapAdjust(int array[], int father_node, int a_length)
+int q_sort(int a[10], int low, int high)
 {
-	int child_node;
-	int temp = 0;
+	if (low >= high)
+		return 0;
 
-	while (2 * father_node + 1 < a_length)
+	int begin = low;
+	int end = high;
+	int key = a[low];
+
+	while (begin < end)
 	{
-		child_node = 2 * father_node + 1;
-
-		if (array[child_node] < array[child_node + 1] && child_node + 1 < a_length)
-			child_node++;
-
-		if (array[child_node] > array[father_node])
+		for (; end > begin; end--)
 		{
-			temp = array[child_node];
-			array[child_node] = array[father_node];
-			array[father_node] = temp;
-			father_node = child_node;
+			if (a[end] < key)
+			{
+				a[begin] = a[end];
+				break;
+			}
 		}
-		else
-			break;
+
+		for (; begin < end; begin++)
+		{
+			if (a[begin] > key)
+			{
+				a[end] = a[begin];
+				break;
+			}
+		}
 	}
+
+	a[begin] = key;
+
+	q_sort(a, 0, begin - 1);
+	q_sort(a, begin + 1, high);
 }
 
-void HeapSort(int array[], int length)
-{
-	for (int i = length / 2 - 1; i >= 0; i--)
-		HeapAdjust(array, i, length);
-
-	int temp = 0;
-	for (int i = length - 1; i > 0; i--)
-	{
-		temp = array[0];
-		array[0] = array[i];
-		array[i] = temp;
-
-		HeapAdjust(array, 0, i);
-	}
-}
 int main()
 {
-	int i;
-	int num[] = { 92, 8, 17, 6, 5, 41, 53, 2, 1, 110 };
-	HeapSort(num, sizeof(num) / sizeof(int));
-	for (i = 0; i < sizeof(num) / sizeof(int); i++)
-		cout << num[i] << " ";
+	int n;
+	string str;
+	int a[] = { 339, 833, 73, 236, 653, 34, 23, 2422, 11314, 1110 };
+	n = sizeof(a) / sizeof(int);
 
+	q_sort(a, 0, n - 1);
+
+	for (int i = 0; i < n; i++)
+		cout << a[i] << " ";
 	cout << endl;
 
 	system("pause");
+
 	return 0;
 }
