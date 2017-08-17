@@ -9,40 +9,40 @@
 
 using namespace std;
 
-int q_sort(int a[10], int low, int high)
+int q_sort(int a[], int low, int high)
 {
-	if (low >= high)
+	int head = low;
+	int tail = high;
+	int key_value = a[low];
+
+	if (head >= tail)
 		return 0;
 
-	int begin = low;
-	int end = high;
-	int key = a[low];
-
-	while (begin < end)
+	while (head < tail)
 	{
-		for (; end > begin; end--)
+		for (; head < tail; tail--)
 		{
-			if (a[end] < key)
+			if (a[tail] < key_value)
 			{
-				a[begin] = a[end];
+				a[head] = a[tail];
 				break;
 			}
 		}
 
-		for (; begin < end; begin++)
+		for (; head < tail; head++)
 		{
-			if (a[begin] > key)
+			if (a[head] > key_value)
 			{
-				a[end] = a[begin];
+				a[tail] = a[head];
 				break;
 			}
 		}
 	}
 
-	a[begin] = key;
+	a[head] = key_value;
 
-	q_sort(a, 0, begin - 1);
-	q_sort(a, begin + 1, high);
+	q_sort(a, 0, head - 1);
+	q_sort(a, head + 1, high);
 }
 
 int main()
@@ -59,6 +59,5 @@ int main()
 	cout << endl;
 
 	system("pause");
-
 	return 0;
 }
