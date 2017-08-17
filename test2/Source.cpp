@@ -53,7 +53,7 @@ int sunday(string a, string b, int hash_table[])
 int main()
 {
 	string a = "LESSONS SOFTWARE% TEARNED IN SOFTWARE% TE";
-	string b = "TEARNED";
+	string b = "SOFTWARE%";
 	int hash_table[128] = {0};
 
 	for (int i = 0; i < b.size(); i++)
