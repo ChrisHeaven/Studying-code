@@ -9,23 +9,44 @@
 
 using namespace std;
 
-int bubble_sort(int a[], int n)
+void heap_adjust(int a[], int father_node, int n)
 {
-	for (int i = n; i >= 0; i--)
+	int child_node;
+	int temp = 0;
+	while (father_node * 2 + 1 <= n)
 	{
-		int temp = 0;
-		for (int j = 0; j < i; j++)
+		child_node = father_node * 2 + 1;
+
+		if (a[child_node + 1] > a[child_node] && child_node + 1 <= n)
+			child_node++;
+
+		if (a[child_node] > a[father_node])
 		{
-			if (a[j + 1] < a[j])
-			{
-				temp = a[j];
-				a[j] = a[j + 1];
-				a[j + 1] = temp;
-			}
+			temp = a[child_node];
+			a[child_node] = a[father_node];
+			a[father_node] = temp;
+			father_node = child_node;
 		}
+		else
+			break;
+	}
+}
+
+void heap_sort(int a[], int n)
+{
+	for (int i = (n - 1) / 2; i >= 0; i--)
+		heap_adjust(a, i, n);
+
+	int temp = 0;
+	for (int i = n; i > 0; i--)
+	{
+		temp = a[0];
+		a[0] = a[i];
+		a[i] = temp;
+
+		heap_adjust(a, 0, i - 1);
 	}
 
-	return 0;
 }
 
 int main()
@@ -35,7 +56,7 @@ int main()
 	int a[] = { 339, 833, 73, 236, 653, 34, 23, 2422, 11314, 1110 };
 	n = sizeof(a) / sizeof(int);
 
-	bubble_sort(a, n - 1);
+	heap_sort(a, n - 1);
 
 	for (int i = 0; i < n; i++)
 		cout << a[i] << " ";
