@@ -9,58 +9,58 @@
 
 using namespace std;
 
-void heap_adjust(int a[], int father_node, int n)
+int sunday(string a, string b, int hash_table[])
 {
-	int child_node;
-	int temp = 0;
-	while (father_node * 2 + 1 <= n)
+	int index = 0;
+
+	for (int i = 0, j = 0; i < a.size(), j < b.size();)
 	{
-		child_node = father_node * 2 + 1;
-
-		if (a[child_node + 1] > a[child_node] && child_node + 1 <= n)
-			child_node++;
-
-		if (a[child_node] > a[father_node])
+		if (a[i] == b[j])
 		{
-			temp = a[child_node];
-			a[child_node] = a[father_node];
-			a[father_node] = temp;
-			father_node = child_node;
+			i++;
+			j++;
+			if (j == b.size())
+			{
+				index = i - j;
+				break;
+			}
 		}
 		else
-			break;
+		{
+			if (i + b.size() < a.size())
+				i = i + b.size();
+			else
+			{
+				index = -1;
+				break;
+			}
+
+			while (i < a.size())
+			{
+				if (hash_table[(int)a[i]] > 0)
+				{
+					j = 0;
+					i = i - hash_table[a[i]] + 1;
+					break;
+				}
+				i++;
+			}
+		}
 	}
-}
-
-void heap_sort(int a[], int n)
-{
-	for (int i = (n - 1) / 2; i >= 0; i--)
-		heap_adjust(a, i, n);
-
-	int temp = 0;
-	for (int i = n; i > 0; i--)
-	{
-		temp = a[0];
-		a[0] = a[i];
-		a[i] = temp;
-
-		heap_adjust(a, 0, i - 1);
-	}
-
+	return index;
 }
 
 int main()
 {
-	int n;
-	string str;
-	int a[] = { 339, 833, 73, 236, 653, 34, 23, 2422, 11314, 1110 };
-	n = sizeof(a) / sizeof(int);
+	string a = "LESSONS SOFTWARE% TEARNED IN SOFTWARE% TE";
+	string b = "TEARNED";
+	int hash_table[128] = {0};
 
-	heap_sort(a, n - 1);
+	for (int i = 0; i < b.size(); i++)
+		hash_table[(int)b[i]] = i + 1;
 
-	for (int i = 0; i < n; i++)
-		cout << a[i] << " ";
-	cout << endl;
+	cout << sunday(a, b, hash_table) << endl;
+	cout << a.find(b) << endl;
 
 	system("pause");
 	return 0;
