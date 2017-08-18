@@ -38,15 +38,36 @@ dll_node *create_dll_node(int data[], int len)
 
 void print_list(dll_node *head)
 {
-	while (head != NULL)
-	{
-		cout << head->value << " ";
-		head = head->next;
-	}
+	for (dll_node *i = head; i != NULL; i = i->next)
+		cout << i->value << " ";
 	cout << endl;
 }
 
-void insert_node(dll_node *p, int value)
+dll_node *insert_node_before(dll_node *p, int value, dll_node *head)
+{
+	dll_node *p_pre = p->pre;
+	dll_node *new_node = new dll_node();
+
+	if (p_pre != NULL)
+	{
+		p->pre = new_node;
+		new_node->next = p;
+		new_node->pre = p_pre;
+		p_pre->next = new_node;
+		new_node->value = value;
+	}
+	else
+	{
+		p->pre = new_node;
+		new_node->next = p;
+		new_node->pre = NULL;
+		new_node->value = value;
+		head = new_node;
+	}
+	return head;
+}
+
+void insert_node_behind(dll_node *p, int value)
 {
 	dll_node *p_next = p->next;
 	dll_node *new_node = new dll_node();
@@ -57,7 +78,6 @@ void insert_node(dll_node *p, int value)
 		new_node->pre = p;
 		new_node->next = p_next;
 		p_next->pre = new_node;
-
 		new_node->value = value;
 	}
 	else
@@ -69,8 +89,10 @@ void insert_node(dll_node *p, int value)
 	}
 }
 
-void delete_list(dll_node *head, dll_node *p)
+dll_node *delete_list(dll_node *head, dll_node *delete_node)
 {
+	dll_node *p = delete_node;
+
 	if (p->next == NULL)
 	{
 		delete p;
@@ -89,6 +111,8 @@ void delete_list(dll_node *head, dll_node *p)
 		delete p;
 		p = NULL;
 	}
+
+	return head;
 }
 
 void main()
@@ -97,22 +121,24 @@ void main()
 	int length = sizeof(data) / sizeof(int);
 	dll_node *head = create_dll_node(data, length);
 	print_list(head);
-	insert_node(head, 8);
+	head = insert_node_before(head, 8, head);
 	print_list(head);
 
-	dll_node *find = head;
-	for (int i = 0; i < length; i++)
+	for (dll_node *i = head; i != NULL; i = i->next)
 	{
-		find = find->next;
-		if (find->value == 3)
-			insert_node(find, 23);
+		if (i->value == 3)
+			insert_node_behind(i, 23);
 	}
 	print_list(head);
 
-	delete_list(head, head);
+	head = delete_list(head, head);
 	print_list(head);
 
-	delete_list(head, head->next);
+	for (dll_node *i = head; i != NULL; i = i->next)
+	{
+		if (i->value == 6)
+			head = delete_list(head, i);
+	}
 	print_list(head);
 
 	system("pause");
