@@ -92,12 +92,10 @@ void insert_node_behind(dll_node *p, int value)
 dll_node *delete_list(dll_node *head, dll_node *delete_node)
 {
 	dll_node *p = delete_node;
+	dll_node *p_next = p->next;
 
 	if (p->next == NULL)
-	{
-		delete p;
-		p = NULL;
-	}
+		p->pre->next = p->next;
 	else if (p == head)
 	{
 		head = head->next;
@@ -106,10 +104,12 @@ dll_node *delete_list(dll_node *head, dll_node *delete_node)
 	}
 	else
 	{
-		p->pre->next = p->next;
-		p->next->pre = p->pre;
-		delete p;
-		p = NULL;
+		if (p_next->next != NULL)
+			p_next->next->pre = p;
+		p->next = p_next->next;
+		p->value = p_next->value;
+		delete p_next;
+		p_next = NULL;
 	}
 
 	return head;
@@ -117,7 +117,7 @@ dll_node *delete_list(dll_node *head, dll_node *delete_node)
 
 void main()
 {
-	int data[] = { 1, 2, 3, 4, 5, 6, 7 };
+	int data[] = { 1, 2, 3, 4, 5, 6, 6, 6, 7, 7 };
 	int length = sizeof(data) / sizeof(int);
 	dll_node *head = create_dll_node(data, length);
 	print_list(head);
@@ -136,8 +136,11 @@ void main()
 
 	for (dll_node *i = head; i != NULL; i = i->next)
 	{
-		if (i->value == 6)
+		if (i->value == 7)
+		{
 			head = delete_list(head, i);
+			i = i->pre;
+		}
 	}
 	print_list(head);
 
