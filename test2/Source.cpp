@@ -9,38 +9,34 @@
 
 using namespace std;
 
-struct ddl_node
+struct dll_node
 {
 	int value;
-	ddl_node *next;
-	ddl_node *pre;
+	dll_node *next;
+	dll_node *pre;
 };
 
-ddl_node *create_ddl_node(int data[], int len)
+dll_node *create_dll_node(int data[], int len)
 {
-	ddl_node *head = new ddl_node();
-	head = NULL;
-	ddl_node *p = head;
+	dll_node *p = new dll_node();
+	p->pre = NULL;
+	p->next = NULL;
+	p->value = data[0];
+	dll_node *head = p;
 
-	for (int i = 0; i < len; i++)
+	for (int i = 1; i < len; i++)
 	{
-		ddl_node *node = new ddl_node();
-		node->value = data[i];
-		node->next = NULL;
-		node->pre = NULL;
-		if (head == NULL)
-			head = node;
-		else
-		{
-			p->next = node;
-			node->pre = p;
-		}
-		p = node;
+		dll_node *new_node = new dll_node();
+		new_node->value = data[i];
+		new_node->pre = p;
+		new_node->next = NULL;
+		p->next = new_node;
+		p = new_node;
 	}
 	return head;
 }
 
-void print_list(ddl_node *head)
+void print_list(dll_node *head)
 {
 	while (head != NULL)
 	{
@@ -50,10 +46,10 @@ void print_list(ddl_node *head)
 	cout << endl;
 }
 
-void insert_node(ddl_node *p, int value)
+void insert_node(dll_node *p, int value)
 {
-	ddl_node *p_next = p->next;
-	ddl_node *new_node = new ddl_node();
+	dll_node *p_next = p->next;
+	dll_node *new_node = new dll_node();
 
 	if (p_next != NULL)
 	{
@@ -73,7 +69,7 @@ void insert_node(ddl_node *p, int value)
 	}
 }
 
-void delete_list(ddl_node *head, ddl_node *p)
+void delete_list(dll_node *head, dll_node *p)
 {
 	if (p->next == NULL)
 	{
@@ -99,12 +95,12 @@ void main()
 {
 	int data[] = { 1, 2, 3, 4, 5, 6, 7 };
 	int length = sizeof(data) / sizeof(int);
-	ddl_node *head = create_ddl_node(data, length);
+	dll_node *head = create_dll_node(data, length);
 	print_list(head);
 	insert_node(head, 8);
 	print_list(head);
 
-	ddl_node *find = head;
+	dll_node *find = head;
 	for (int i = 0; i < length; i++)
 	{
 		find = find->next;
@@ -113,8 +109,8 @@ void main()
 	}
 	print_list(head);
 
-	//delete_list(head, head);
-	//print_list(head);
+	delete_list(head, head);
+	print_list(head);
 
 	delete_list(head, head->next);
 	print_list(head);
