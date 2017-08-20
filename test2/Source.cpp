@@ -9,57 +9,16 @@
 
 using namespace std;
 
-vector<vector<int>> relation(6, vector<int>(6, 0));
-
-void add_edge(int a, int b)
+void point_test(int &a)
 {
-	relation[a][b + 1]++;
-	relation[b][0]++;
+	a = a + 10;
 }
 
-void top_sort()
+void main(void)
 {
-	int n = relation[0].size();
-	int count = n;
-
-	while (count > 0)
-	{
-		int zero = 0;
-		for (int i = 0; i < n; i++)
-		{
-			if (relation[i][0] == 0)
-			{
-				cout << i << " ";
-				relation[i][0] = -1;
-				for (int j = 1; j < n; j++)
-				{
-					if (relation[i][j] > 0)
-						relation[j - 1][0]--;
-				}
-				count--;
-				zero++;
-			}
-		}
-		if (zero == 0)
-			break;
-	}
-	cout << endl;
-
-	if (count > 0)
-		cout << "ERROR" << endl;
-}
-
-void main()
-{
-	add_edge(5, 2);
-	add_edge(5, 0);
-	add_edge(4, 0);
-	add_edge(4, 1);
-	add_edge(2, 3);
-	add_edge(3, 1);
-	add_edge(1, 0);
-
-	top_sort();
+	int a = 0;
+	point_test(a);
+	cout << a << endl;
 
 	system("pause");
 }
