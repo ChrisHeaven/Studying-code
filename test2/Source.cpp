@@ -11,32 +11,41 @@ using namespace std;
 
 int main(void)
 {
-	int n;
-	while (cin >> n)
+	int m, n;
+
+	while (cin >> m >> n)
 	{
-		// long long sum = 1;
-		// for (long long i = 1; i <= n; i++)
-		// 	sum = sum * i;
-
-		// long long count = 0;
-		// while (sum % 10 == 0)
-		// {
-		// 	count++;
-		// 	sum = sum / 10;
-		// }
-
-		int count = 0;
-		for (int i = 1; i <= n; i++)
+		vector<int> result;
+	
+		int neg = 1;
+		if (m < 0)
 		{
-			int current_i = i;
-			while (current_i % 5 == 0)
-			{
-				count++;
-				current_i = current_i / 5;
-			}
+			m = m * (-1);
+			neg = -1;
+		}
+		else if (m == 0)
+			cout << 0;
+		
+		while (m > 0)
+		{
+			int a = m % n;
+
+			result.push_back(a);
+			m = m / n;
 		}
 
-		cout << count << endl;
+		if (neg == -1)
+			cout << "-";
+
+		for (int i = result.size() - 1; i >= 0; i--)
+		{
+			if (result[i] >= 10)
+				cout << (char)(result[i] - 10 + 65);
+			else
+				cout << result[i];
+		}
+
+		cout << endl;
 	}
 
 	// system("pause");
