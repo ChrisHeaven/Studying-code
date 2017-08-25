@@ -9,16 +9,36 @@
 
 using namespace std;
 
-void point_test(int &a)
+int main(void)
 {
-	a = a + 10;
-}
+	int n;
+	while (cin >> n)
+	{
+		// long long sum = 1;
+		// for (long long i = 1; i <= n; i++)
+		// 	sum = sum * i;
 
-void main(void)
-{
-	int a = 0;
-	point_test(a);
-	cout << a << endl;
+		// long long count = 0;
+		// while (sum % 10 == 0)
+		// {
+		// 	count++;
+		// 	sum = sum / 10;
+		// }
 
-	system("pause");
+		int count = 0;
+		for (int i = 1; i <= n; i++)
+		{
+			int current_i = i;
+			while (current_i % 5 == 0)
+			{
+				count++;
+				current_i = current_i / 5;
+			}
+		}
+
+		cout << count << endl;
+	}
+
+	// system("pause");
+	return 0;
 }
