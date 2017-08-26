@@ -9,45 +9,49 @@
 
 using namespace std;
 
+// long long dp[1000][1000];
+
 int main(void)
 {
-	int m, n;
+	string buff;
+	vector<int> a;
+	string num;
+	int index;
 
-	while (cin >> m >> n)
+	getline(cin, buff);
+	buff.push_back(' ');
+	cin >> index;
+
+	for (int i = 0; i < buff.size(); i++)
 	{
-		vector<int> result;
-	
-		int neg = 1;
-		if (m < 0)
+		if (buff[i] != ' ')
+			num.push_back(buff[i]);
+		else
 		{
-			m = m * (-1);
-			neg = -1;
+			int temp = atoi(num.c_str());
+			a.push_back(temp);
+			num.clear();
 		}
-		else if (m == 0)
-			cout << 0;
-		
-		while (m > 0)
-		{
-			int a = m % n;
-
-			result.push_back(a);
-			m = m / n;
-		}
-
-		if (neg == -1)
-			cout << "-";
-
-		for (int i = result.size() - 1; i >= 0; i--)
-		{
-			if (result[i] >= 10)
-				cout << (char)(result[i] - 10 + 65);
-			else
-				cout << result[i];
-		}
-
-		cout << endl;
 	}
 
-	// system("pause");
+	int max_num = -1e5;
+	int max_index = 0;
+	for (int j = 0; j < index; j++)
+	{
+		max_num = -1e5;
+		for (int i = 0; i < a.size(); i++)
+		{
+			if (a[i] > max_num)
+			{
+				max_num = a[i];
+				max_index = i;
+			}
+		}
+		a[max_index] = -1e5;
+	}
+
+	cout << max_num << endl;
+
+	system("pause");
 	return 0;
 }

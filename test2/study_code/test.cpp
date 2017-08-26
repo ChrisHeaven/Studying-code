@@ -9,56 +9,29 @@
 
 using namespace std;
 
-int q_sort(int a[10], int low, int high)
+// long long dp[1000][1000];
+
+int main(void)
 {
-    if (low >= high)
-        return 0;
+    int buff;
+    vector<int> a;
 
-    int begin = low;
-    int end = high;
-    int key = a[low];
-
-    while (begin < end)
+    while (cin >> buff)
     {
-        for (; end > begin; end--)
-        {
-            if (a[end] < key)
-            {
-                a[begin] = a[end];
-                break;
-            }
-        }
-
-        for (; begin < end; begin++)
-        {
-            if (a[begin] > key)
-            {
-                a[end] = a[begin];
-                break;
-            }
-        }
+        a.push_back(buff);
     }
 
-    a[begin] = key;
+    vector<int> dp(n);
+    dp[0] = a[0];
+    int maxVal = a[0];
+    for (int i = 1; i < n; i++)
+    {
+                dp[i] = max(a[i], dp[i - 1] + a[i]);
+                if (dp[i] > maxVal)
+                        maxVal = dp[i];   
+    }
+        cout << maxVal << endl;
 
-    q_sort(a, 0, begin - 1);
-    q_sort(a, begin + 1, high);
-}
-
-int main()
-{
-    int n;
-    string str;
-    int a[] = { 339, 833, 73, 236, 653, 34, 23, 2422, 11314, 1110 };
-    n = sizeof(a) / sizeof(int);
-
-    q_sort(a, 0, n - 1);
-
-    for (int i = 0; i < n; i++)
-        cout << a[i] << " ";
-    cout << endl;
-
-    system("pause");
-
+    // system("pause");
     return 0;
 }
