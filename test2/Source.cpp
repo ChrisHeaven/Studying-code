@@ -9,49 +9,51 @@
 
 using namespace std;
 
-// long long dp[1000][1000];
+int transformers(int m, int n)
+{
+	vector<int> result;
+
+	int neg = 1;
+	if (m < 0)
+	{
+		m = m * (-1);
+		neg = -1;
+	}
+	else if (m == 0)
+		cout << 0;
+
+	while (m > 0)
+	{
+		int a = m % n;
+
+		result.push_back(a);
+		m = m / n;
+	}
+
+	if (neg == -1)
+		cout << "-";
+
+	int sum = 0;
+	for (int i = result.size() - 1; i >= 0; i--)
+		sum = sum + result[i];
+
+	return sum;
+}
 
 int main(void)
 {
-	string buff;
-	vector<int> a;
-	string num;
-	int index;
+	int m;
 
-	getline(cin, buff);
-	buff.push_back(' ');
-	cin >> index;
-
-	for (int i = 0; i < buff.size(); i++)
+	while (cin >> m)
 	{
-		if (buff[i] != ' ')
-			num.push_back(buff[i]);
-		else
-		{
-			int temp = atoi(num.c_str());
-			a.push_back(temp);
-			num.clear();
-		}
+		int sum = 0;
+
+		for (int i = 2; i < m; i++)
+			sum = sum + transformers(m, i);
+
+		cout << sum << '/' << m - 2 << endl;
 	}
 
-	int max_num = -1e5;
-	int max_index = 0;
-	for (int j = 0; j < index; j++)
-	{
-		max_num = -1e5;
-		for (int i = 0; i < a.size(); i++)
-		{
-			if (a[i] > max_num)
-			{
-				max_num = a[i];
-				max_index = i;
-			}
-		}
-		a[max_index] = -1e5;
-	}
-
-	cout << max_num << endl;
-
-	system("pause");
+	// system("pause");
 	return 0;
 }
