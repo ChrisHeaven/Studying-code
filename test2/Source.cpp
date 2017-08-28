@@ -9,49 +9,42 @@
 
 using namespace std;
 
-int transformers(int m, int n)
+int set_check(int arr[32], int id, int op)
 {
-	vector<int> result;
+	int index_1 = id / 32;
+	int index_2 = id % 32;
+	unsigned int temp = 0x80000000;
 
-	int neg = 1;
-	if (m < 0)
+	if (op == 0)
 	{
-		m = m * (-1);
-		neg = -1;
+		temp = temp >> index_2;
+		arr[index_1] = arr[index_1] | temp;
+		return -1;
 	}
-	else if (m == 0)
-		cout << 0;
-
-	while (m > 0)
+	else
 	{
-		int a = m % n;
-
-		result.push_back(a);
-		m = m / n;
+		temp = temp >> index_2;
+		if ((arr[index_1] & temp) == 0)
+			return 0;
+		else
+			return 1;
 	}
-
-	if (neg == -1)
-		cout << "-";
-
-	int sum = 0;
-	for (int i = result.size() - 1; i >= 0; i--)
-		sum = sum + result[i];
-
-	return sum;
 }
 
 int main(void)
 {
-	int m;
+	int id_1, id_2;
+	int arr[32] = { 0 };
 
-	while (cin >> m)
+	while (cin >> id_1 >> id_2)
 	{
-		int sum = 0;
-
-		for (int i = 2; i < m; i++)
-			sum = sum + transformers(m, i);
-
-		cout << sum << '/' << m - 2 << endl;
+		if (id_1 < 1 || id_1 > 1024 || id_2 < 1 || id_2 > 1024)
+			cout << -1 << endl;
+		else
+		{
+			set_check(arr, id_1 - 1, 0);
+			cout << set_check(arr, id_2 - 1, 1) << endl;
+		}
 	}
 
 	// system("pause");
