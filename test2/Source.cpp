@@ -9,42 +9,37 @@
 
 using namespace std;
 
-int set_check(int arr[32], int id, int op)
-{
-	int index_1 = id / 32;
-	int index_2 = id % 32;
-	unsigned int temp = 0x80000000;
-
-	if (op == 0)
-	{
-		temp = temp >> index_2;
-		arr[index_1] = arr[index_1] | temp;
-		return -1;
-	}
-	else
-	{
-		temp = temp >> index_2;
-		if ((arr[index_1] & temp) == 0)
-			return 0;
-		else
-			return 1;
-	}
-}
-
 int main(void)
 {
-	int id_1, id_2;
-	int arr[32] = { 0 };
+	string num;
 
-	while (cin >> id_1 >> id_2)
+	while (cin >> num)
 	{
-		if (id_1 < 1 || id_1 > 1024 || id_2 < 1 || id_2 > 1024)
-			cout << -1 << endl;
-		else
+		int index = -1;
+		if (num.size() == 1)
 		{
-			set_check(arr, id_1 - 1, 0);
-			cout << set_check(arr, id_2 - 1, 1) << endl;
+			index = index + (num[0] - 'a') * (((25 + 1) * 25 + 1) * 25 + 1) + 1;
 		}
+		if (num.size() == 2)
+		{
+			index = index + (num[0] - 'a') * (((25 + 1) * 25 + 1) * 25 + 1) + 1;
+			index = index + (num[1] - 'a') * ((25 + 1) * 25 + 1) + 1;
+		}
+		if (num.size() == 3)
+		{
+			index = index + (num[0] - 'a') * (((25 + 1) * 25 + 1) * 25 + 1) + 1;
+			index = index + (num[1] - 'a') * ((25 + 1) * 25 + 1) + 1;
+			index = index + (num[2] - 'a') * (25 + 1) + 1;
+		}
+		if (num.size() == 4)
+		{
+			index = index + (num[0] - 'a') * (((25 + 1) * 25 + 1) * 25 + 1) + 1;
+			index = index + (num[1] - 'a') * ((25 + 1) * 25 + 1) + 1;
+			index = index + (num[2] - 'a') * (25 + 1) + 1;
+			index = index + (num[3] - 'a') + 1;
+		}
+
+		cout << index << endl;
 	}
 
 	// system("pause");
