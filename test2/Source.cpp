@@ -11,35 +11,31 @@ using namespace std;
 
 int main(void)
 {
-	string num;
+	int k, node[3];
 
-	while (cin >> num)
+	while (cin >> k)
 	{
-		int index = -1;
-		if (num.size() == 1)
+		for (int i = 0; i < 3; i++)
+			cin >> node[i];
+
+		int flag = 0, root = pow(2, k - 1);
+		while (flag == 0)
 		{
-			index = index + (num[0] - 'a') * (((25 + 1) * 25 + 1) * 25 + 1) + 1;
-		}
-		if (num.size() == 2)
-		{
-			index = index + (num[0] - 'a') * (((25 + 1) * 25 + 1) * 25 + 1) + 1;
-			index = index + (num[1] - 'a') * ((25 + 1) * 25 + 1) + 1;
-		}
-		if (num.size() == 3)
-		{
-			index = index + (num[0] - 'a') * (((25 + 1) * 25 + 1) * 25 + 1) + 1;
-			index = index + (num[1] - 'a') * ((25 + 1) * 25 + 1) + 1;
-			index = index + (num[2] - 'a') * (25 + 1) + 1;
-		}
-		if (num.size() == 4)
-		{
-			index = index + (num[0] - 'a') * (((25 + 1) * 25 + 1) * 25 + 1) + 1;
-			index = index + (num[1] - 'a') * ((25 + 1) * 25 + 1) + 1;
-			index = index + (num[2] - 'a') * (25 + 1) + 1;
-			index = index + (num[3] - 'a') + 1;
+			if (node[0] < root && node[1] < root && node[2] < root)
+			{
+				root = root - pow(2, k - 2);
+				k--;
+			}
+			else if (node[0] > root && node[1] > root && node[2] > root)
+			{
+				root = root + pow(2, k - 2);
+				k--;
+			}
+			else
+				flag = 1;
 		}
 
-		cout << index << endl;
+		cout << root << endl;
 	}
 
 	// system("pause");
