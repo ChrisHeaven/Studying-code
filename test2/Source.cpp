@@ -7,72 +7,52 @@
 #include <iomanip>
 #include <algorithm>
 #include <map>
+#include <stack>
 
 using namespace std;
 
+class TwoStacks {
+public:
+	vector<int> twoStacksSort(vector<int> numbers)
+	{
+		stack<int> sta;
+		vector<int> result;
+
+		while (!numbers.empty())
+		{
+			int temp = numbers.back();
+			numbers.pop_back();
+			while (sta.size() != 0 && temp < sta.top())
+			{
+				numbers.push_back(sta.top());
+				sta.pop();
+			}
+			sta.push(temp);
+		}
+
+		int length = sta.size();
+		for (int i = 0; i < length; i++)
+		{
+			result.push_back(sta.top());
+			sta.pop();
+		}
+
+		return result;
+	}
+};
+
 int main(void)
 {
-	string str_1, str_2;
-	while (cin >> str_1 >> str_2)
-	{
-		vector<int> num_1;
-		vector<int> num_2;
+	int a[5] = {11, 2, 31, 14, 5};
+	TwoStacks A;
+	vector<int> arr(a, a + 5), res;
+	res = A.twoStacksSort(arr);
 
-		for (int i = str_1.size() - 1; i >= 0; i--)
-			num_1.push_back((int)(str_1[i] - '0'));
+	for (int i = 0; i < res.size(); i++)
+		cout << res[i] << ' ';
 
-		for (int i = str_2.size() - 1; i >= 0; i--)
-			num_2.push_back((int)(str_2[i] - '0'));
+	cout << endl;
 
-		int length = num_1.size() + num_2.size();
-		vector<int> result(length, 0);
-
-		for (int i = 0; i < num_1.size(); i++)
-		{
-			for (int j = 0; j < num_2.size(); j++)
-			{
-				int temp = 0;
-				temp = num_1[i] * num_2[j];
-				if (temp >= 10)
-				{
-					result[i + j] += temp % 10;
-					if (result[i + j] >= 10)
-					{
-						result[i + j + 1] += result[i + j] / 10;
-						result[i + j] = result[i + j] % 10;
-					}
-					result[i + j + 1] += temp / 10;
-				}
-				else
-				{
-					result[i + j] += temp;
-					if (result[i + j] >= 10)
-					{
-						result[i + j + 1] += result[i + j] / 10;
-						result[i + j] = result[i + j] % 10;
-					}
-				}
-			}
-		}
-
-		for (int i = result.size() - 1; i >= 0; i--)
-		{
-			if (result.back() == 0)
-				result.pop_back();
-			else 
-			{
-				if (result[i] >= 10)
-				{
-					result[i + 1] = result[i] / 10;
-					result[i] = result[i] % 10;
-				}
-			}
-		}
-		for (int i = result.size() - 1; i >= 0; i--)
-			cout << result[i];
-
-		cout << endl;
-	}
-	// system("pause");
+	system("pause");
 	return 0;
 }
