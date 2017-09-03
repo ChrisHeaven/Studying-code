@@ -12,66 +12,66 @@ using namespace std;
 
 int main(void)
 {
-	int n;
-	while (cin >> n)
+	string str_1, str_2;
+	while (cin >> str_1 >> str_2)
 	{
-		int buff;
-		vector<int> arr_for_max;
-		vector<int> arr_for_min;
+		vector<int> num_1;
+		vector<int> num_2;
 
-		for (int i = 0; i < n; i++)
+		for (int i = str_1.size() - 1; i >= 0; i--)
+			num_1.push_back((int)(str_1[i] - '0'));
+
+		for (int i = str_2.size() - 1; i >= 0; i--)
+			num_2.push_back((int)(str_2[i] - '0'));
+
+		int length = num_1.size() + num_2.size();
+		vector<int> result(length, 0);
+
+		for (int i = 0; i < num_1.size(); i++)
 		{
-			cin >> buff;
-			arr_for_max.push_back(buff);
-			arr_for_min.push_back(buff);
-		}
-
-		long long sum = 1;
-		int max_three[3];
-		int min_three[3];
-		int max_index = 0, min_index = 0;
-
-		for (int i = 0; i < 3; i++)
-		{
-			int max_value = -1e6;
-			int min_value = 1e6;
-			for (int j = 0; j < n; j++)
+			for (int j = 0; j < num_2.size(); j++)
 			{
-				if (arr_for_max[j] > max_value)
+				int temp = 0;
+				temp = num_1[i] * num_2[j];
+				if (temp >= 10)
 				{
-					max_value = arr_for_max[j];
-					max_index = j;
+					result[i + j] += temp % 10;
+					if (result[i + j] >= 10)
+					{
+						result[i + j + 1] += result[i + j] / 10;
+						result[i + j] = result[i + j] % 10;
+					}
+					result[i + j + 1] += temp / 10;
 				}
-
-				if (arr_for_min[j] < min_value)
+				else
 				{
-					min_value = arr_for_min[j];
-					min_index = j;
+					result[i + j] += temp;
+					if (result[i + j] >= 10)
+					{
+						result[i + j + 1] += result[i + j] / 10;
+						result[i + j] = result[i + j] % 10;
+					}
 				}
 			}
-			max_three[i] = max_value;
-			arr_for_max[max_index] = -1e6;
-
-			min_three[i] = min_value;
-			arr_for_min[min_index] = 1e6;
 		}
 
-		long long sum_1, sum_2;
+		for (int i = result.size() - 1; i >= 0; i--)
+		{
+			if (result.back() == 0)
+				result.pop_back();
+			else 
+			{
+				if (result[i] >= 10)
+				{
+					result[i + 1] = result[i] / 10;
+					result[i] = result[i] % 10;
+				}
+			}
+		}
+		for (int i = result.size() - 1; i >= 0; i--)
+			cout << result[i];
 
-		sum_1 = max_three[0];
-		sum_1 = sum_1 * max_three[1];
-		sum_1 = sum_1 * max_three[2];
-
-		sum_2 = max_three[0];
-		sum_2 = sum_2 * min_three[0];
-		sum_2 = sum_2 * min_three[1];
-
-		if (sum_1 >= sum_2)
-			sum = sum_1;
-		else
-			sum = sum_2;
-
-		cout << sum << endl;
+		cout << endl;
 	}
 	// system("pause");
 	return 0;
