@@ -10,120 +10,69 @@
 
 using namespace std;
 
-void DFS(vector<vector<pair<string, int>>> &dir, int root, string mask) {
-	string next_mask;
-	for (int i = 0; i < dir[root].size(); ++i) {
-		pair<string, int> node = dir[root][i];
-		cout << mask;
-		if (i != dir[root].size() - 1) {
-			cout << "|-- ";
-		}
-		else {
-			cout << "`-- ";
-		}
-		cout << node.first << endl;
-
-		if (i == dir[root].size() - 1)
-		{
-			next_mask = "    " + mask;
-		}
-		else {
-			next_mask = mask + "|   ";
-		}
-		DFS(dir, node.second, next_mask);
-	}
-}
-
 int main(void)
 {
 	int n;
 	while (cin >> n)
 	{
-		vector<vector<pair<string, int>>> dir(n + 1);
-		for (int i = 0; i < n; ++i) {
-			string node_s;
-			int father_idx;
-			pair<string, int> node;
-			cin >> node_s >> father_idx;
-			node.first = node_s;
-			node.second = i + 1;
-			dir[father_idx + 1].push_back(node);
+		int buff;
+		vector<int> arr_for_max;
+		vector<int> arr_for_min;
+
+		for (int i = 0; i < n; i++)
+		{
+			cin >> buff;
+			arr_for_max.push_back(buff);
+			arr_for_min.push_back(buff);
 		}
 
-		for (int i = 0; i < dir.size(); ++i) {
-			sort(dir[i].begin(), dir[i].end());
+		long long sum = 1;
+		int max_three[3];
+		int min_three[3];
+		int max_index = 0, min_index = 0;
+
+		for (int i = 0; i < 3; i++)
+		{
+			int max_value = -1e6;
+			int min_value = 1e6;
+			for (int j = 0; j < n; j++)
+			{
+				if (arr_for_max[j] > max_value)
+				{
+					max_value = arr_for_max[j];
+					max_index = j;
+				}
+
+				if (arr_for_min[j] < min_value)
+				{
+					min_value = arr_for_min[j];
+					min_index = j;
+				}
+			}
+			max_three[i] = max_value;
+			arr_for_max[max_index] = -1e6;
+
+			min_three[i] = min_value;
+			arr_for_min[min_index] = 1e6;
 		}
 
-		cout << dir[0][0].first << endl;
-		DFS(dir, 1, "");
+		long long sum_1, sum_2;
 
-		// int father = -1, count = n, node_count = 0;
-		// while (count > 0)
-		// {
-		// 	int index_[1000], flag = 0;
-		// 	for (int j = 0; j < n; j++)
-		// 	{
-		// 		if (father_node[j] == father)
-		// 		{
-		// 			// cout << filename[j] << endl;
-		// 			if (father == -1) {
-		// 				// output.push_back(filename[j]);
-		// 				count--;
-		// 				index_[node_count] = j;
-		// 				node_count++;
-		// 				flag = 1;
-		// 			}
-		// 			else
-		// 			{
-		// 				filename[j] = "-- " + filename[j];
-		// 				// output.push_back("-- " + filename[j]);
-		// 				count--;
-		// 				index_[node_count] = j;
-		// 				node_count++;
-		// 				flag = 1;
-		// 			}
-		// 		}
-		// 	}
-		// 	if (flag == 0)
-		// 	{
-		// 		node_count--;
-		// 		father = file_index[index_[node_count - 1]];
-		// 	}
-		// 	else
-		// 		father = file_index[index_[node_count - 1]];
-		// }
+		sum_1 = max_three[0];
+		sum_1 = sum_1 * max_three[1];
+		sum_1 = sum_1 * max_three[2];
 
-		// vector<vector<string>> final(father);
-		// int iter = 0;
-		// string add_ = "";
-		// for (int j = 0; j < father; j++)
-		// {
-		// 	for (int i = 0; i < filename.size(); i++)
-		// 	{
-		// 		if (father_node[i] == -1 && j == 0)
-		// 			cout << filename[i] << endl;
-		// 		else if (father_node[i] == j)
-		// 		{
-		// 			filename[i] = add_ + filename[i];
-		// 			final[j].push_back(filename[i]);
-		// 		}
-		// 	}
-		// 	add_ = add_ + " |";
-		// 	sort(final[j].begin(), final[j].end());
-		// }
+		sum_2 = max_three[0];
+		sum_2 = sum_2 * min_three[0];
+		sum_2 = sum_2 * min_three[1];
 
-		// for (int j = 0; j < father; j++)
-		// {
-		// 	for (int i = 0; i < final[j].size(); i++)
-		// 	{
-		// 		if (i == final[j].size() - 1)
-		// 			cout << '`' << final[j][i] << endl;
-		// 		else
-		// 			cout << '|' << final[j][i] << endl;
-		// 	}
-		// }
+		if (sum_1 >= sum_2)
+			sum = sum_1;
+		else
+			sum = sum_2;
+
+		cout << sum << endl;
 	}
-
 	// system("pause");
 	return 0;
 }
