@@ -6,53 +6,53 @@
 #include <math.h>
 #include <iomanip>
 #include <algorithm>
-#include <map>
-#include <stack>
 
 using namespace std;
 
-class TwoStacks {
-public:
-	vector<int> twoStacksSort(vector<int> numbers)
-	{
-		stack<int> sta;
-		vector<int> result;
+int temp[1000] = {0};
 
-		while (!numbers.empty())
-		{
-			int temp = numbers.back();
-			numbers.pop_back();
-			while (sta.size() != 0 && temp < sta.top())
-			{
-				numbers.push_back(sta.top());
-				sta.pop();
-			}
-			sta.push(temp);
-		}
-
-		int length = sta.size();
-		for (int i = 0; i < length; i++)
-		{
-			result.push_back(sta.top());
-			sta.pop();
-		}
-
-		return result;
-	}
-};
-
-int main(void)
+int main()
 {
-	int a[5] = {11, 2, 31, 14, 5};
-	TwoStacks A;
-	vector<int> arr(a, a + 5), res;
-	res = A.twoStacksSort(arr);
+	string arr;
+	string div;
+	while (cin >> arr >> div)
+	{
+		for (int i = 0; i < arr.size();)
+		{
+			int flag = 1;
+			if (arr[i] == div[0])
+			{
+				for (int j = i; j < i + div.size(); j++)
+				{
+					if (arr[j] != div[j - i])
+					{
+						flag = 1;
+						break;
+					}
+					else
+						flag = 0;
+				}
+			}
 
-	for (int i = 0; i < res.size(); i++)
-		cout << res[i] << ' ';
+			if (flag == 0)
+			{
+				for (int j = i; j < i + div.size(); j++)
+				{
+					arr[j] = ' ';
+					if (j == i + div.size() - 1)
+						arr[j] = '\n';
+				}
+				i = i + div.size();
+			}
+			else
+				i++;
+		}
 
-	cout << endl;
+		for (int i = 0; i < arr.size(); i++)
+			cout << arr[i];
 
-	system("pause");
+		cout << endl;
+	}
+
 	return 0;
 }
